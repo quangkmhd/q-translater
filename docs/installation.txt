@@ -1,0 +1,77 @@
+Q TRANSLATE - CAI TREN MAY UBUNTU KHAC
+
+1. Moi truong
+   Ubuntu GNOME 24.04 hoac 26.04, trong phien desktop cua tai khoan se dung app.
+   GNOME Shell 46 va 50 duoc cho phep nap extension. Ubuntu 26/GNOME 50 da
+   duoc thu; Ubuntu 24/GNOME 46 van can kiem thu tren may dich.
+   Chua ho tro desktop KDE, Cinnamon, XFCE hay moi ban Linux noi chung.
+   Cac terminal/TUI khac van co the co co che lay vung chon khac nhau.
+
+2. Chuyen file
+   Giai nen q-translate-ubuntu.tar.gz. Trong thu muc giai nen co:
+     q-translate.deb
+     CAI-DAT.txt
+     SHA256SUMS
+   Chuyen them q-translate-import.txt tu may cu neu muon dung lai key/model.
+   File key khong nam trong goi cai. Chi chuyen rieng giua cac may cua ban.
+   Neu tai goi tu nguon cong khai thi khong dang kem file key.
+
+3. Cai ung dung va dependency
+   Mo terminal trong thu muc vua giai nen:
+
+     sha256sum -c SHA256SUMS
+     sudo apt install ./q-translate.deb
+
+   Can Internet de apt tai dependency va de dich/chat qua API.
+   Neu apt bao khong tim thay dependency, chay sudo apt update roi thu lai.
+
+4. Nap GNOME extension
+   Luu cong viec, dang xuat Ubuntu roi dang nhap lai (khong chi dong terminal).
+   Chay:
+
+     gnome-extensions enable qtranslate@local
+
+   Hoac mo qtranslate settings, vao muc key/import va bam Kich hoat phim tat.
+
+5. Import key/model va mo dashboard
+   Dat file key vao thu muc dang dung, roi chay:
+
+     qtranslate import --file ./q-translate-import.txt
+     qtranslate settings
+
+   Hoac dung nut Nhap .env / TXT trong dashboard de chon file.
+   File nay chua key Azure cho Alt+C va key/model AI da xac minh.
+   Import key/model khong sao chep toan bo tuy chon giao dien cua may cu.
+   Import lan dau bat tu khoi dong khi dang nhap; co the tat trong dashboard.
+   Dashboard khoi dong backend nen; dong dashboard van giu backend.
+
+6. Thu nhanh
+   Boi den mot cau tren trinh duyet, thu Alt+C (dich) va Alt+V (viet lai).
+   Alt+X chup vung anh de dich; Alt+D mo tro ly chat.
+   Kiem tra ket noi extension/backend:
+
+     qtranslate status
+
+   Neu extension chua hien: kiem tra GNOME version va dang xuat/dang nhap lai.
+   Neu may dich da tung cai Q Translate user-local, ban trong
+   ~/.local/share/gnome-shell/extensions/qtranslate@local co the che ban
+   he thong. Can kiem tra ban dang duoc GNOME nap truoc khi cap nhat.
+
+7. Cap nhat / go cai dat
+   Cap nhat bang goi moi cung lenh sudo apt install ./q-translate.deb,
+   sau do dang xuat/dang nhap de nap thay doi GNOME Shell.
+   Truoc khi go, tat Tu khoi dong trong dashboard. Sau do:
+
+     qtranslate quit
+     gnome-extensions disable qtranslate@local
+     sudo apt remove q-translate
+
+   Cau hinh/key/log trong tai khoan khong bi apt remove xoa.
+
+8. Build lai tu source
+   Trong thu muc source Q-translate tren Ubuntu:
+
+     ./packaging/build_deb.sh
+
+   Ket qua: dist/q-translate.deb. Giai doan build can Python 3.12+,
+   dpkg-deb va glib-compile-schemas; khong can key de build.

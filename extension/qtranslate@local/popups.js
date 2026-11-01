@@ -13,6 +13,9 @@ export class Popup{
   this.body=box(false,{style:'spacing:14px;'});this.actor.add_child(this.body);
   this.scroll=new St.ScrollView({overlay_scrollbars:true,x_expand:true});this.body.add_child(this.scroll);this.label=new St.Label({text:'',style_class:'qtranslate-text',reactive:true});this.label.clutter_text.line_wrap=true;this.label.clutter_text.line_wrap_mode=Pango.WrapMode.WORD_CHAR;this.label.clutter_text.ellipsize=Pango.EllipsizeMode.NONE;this.label.clutter_text.selectable=true;
   const text=this.label.clutter_text;text.reactive=true;text.editable=false;
+  // St.Label styles the normal foreground only. Unlike St.Entry it does not
+  // apply selection colors, so Clutter otherwise paints light text on light.
+  this.label.connect('style-changed',()=>{const theme=this.label.get_theme_node();const [hasBackground,background]=theme.lookup_color('selection-background-color',true);const [hasForeground,foreground]=theme.lookup_color('selected-color',true);if(hasBackground)text.selection_color=background;if(hasForeground)text.selected_text_color=foreground;});
   text.connect('button-press-event',(_text,event)=>{if(event.get_button()===1)text.grab_key_focus();return Clutter.EVENT_PROPAGATE;});
   text.connect('button-release-event',(_text,event)=>{if(event.get_button()===1){if(this.focusIdle)GLib.source_remove(this.focusIdle);this.focusIdle=GLib.idle_add(GLib.PRIORITY_DEFAULT,()=>{this.focusIdle=0;if(this.actor.visible)text.grab_key_focus();return GLib.SOURCE_REMOVE;});}return Clutter.EVENT_PROPAGATE;});
   text.connect('key-press-event',(_text,event)=>{const symbol=event.get_key_symbol();if((event.get_state()&Clutter.ModifierType.CONTROL_MASK)&&[Clutter.KEY_c,Clutter.KEY_C,Clutter.KEY_Insert].includes(symbol)){this.copyText(true);return Clutter.EVENT_STOP;}return Clutter.EVENT_PROPAGATE;});

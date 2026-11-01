@@ -11,6 +11,7 @@ function fixture(action){
   set_child(child){this.children=[child];} connect(name,cb){this[name]=cb;return ++serial;}
   hide(){this.visible=false;} show(){this.visible=true;} destroy(){this.destroyed=true;}
   set_style(style){this.style=style;} get_preferred_width(){return [100,350];} get_preferred_height(){return [60,60];}
+  get_theme_node(){return {lookup_color:name=>name==='selection-background-color'?[true,{hex:'#6e5799'}]:name==='selected-color'?[true,{hex:'#ffffff'}]:[false,null]};}
   get_transformed_position(){return [this.x??0,this.y??0];} get_transformed_size(){return [this.width, this.height];} set_position(x,y){this.x=x;this.y=y;}
  }
  class Icon extends Widget{constructor(props){super(props);images.push(this);}}
@@ -29,6 +30,7 @@ function fixture(action){
  return {popup,apply,tick,timers,files,images,signals,copied,focused:()=>focus,nativeClick:(x,y,type=1)=>{currentEvent={type:()=>type,get_coords:()=>[x,y]};for(const signal of [...signals.values()])if(signal.name==='notify::user-time')signal.cb(nativeWindow);currentEvent=null;},closed:()=>closed,pointer:(x,y,mask)=>pointer=[x,y,mask]};
 }
 for(const action of ['translate','rewrite','image_translate']){
+ test(`${action}: selected text has its own contrasting foreground and background`,()=>{const f=fixture(action);f.apply();assert.equal(typeof f.popup.label['style-changed'],'function');f.popup.label['style-changed']();assert.equal(f.popup.label.clutter_text.selection_color.hex,'#6e5799');assert.equal(f.popup.label.clutter_text.selected_text_color.hex,'#ffffff');const css=fs.readFileSync(new URL('../stylesheet.css',import.meta.url),'utf8');assert.match(css,/selection-background-color:\s*#6e5799/i);assert.match(css,/selected-color:\s*#ffffff/i);f.popup.destroy();});
  test(`${action}: output receives mouse input and stays read-only`,()=>{const f=fixture(action);f.apply();const text=f.popup.label.clutter_text;assert.equal(text.reactive,true);assert.equal(text.selectable,true);assert.equal(text.editable,false);text['button-press-event'](text,{get_button:()=>1});assert.equal(f.focused(),text);f.popup.destroy();});
  test(`${action}: selected substring is copied by Ctrl+C and copy icon`,()=>{const f=fixture(action);f.apply();const text=f.popup.label.clutter_text;text.selection='Translated';const event={get_state:()=>4,get_key_symbol:()=>99};assert.equal(text['key-press-event'](text,event),true);assert.deepEqual(f.copied,['Translated']);f.popup.copy.clicked();assert.deepEqual(f.copied,['Translated','Translated']);text.selection='';f.popup.copy.clicked();assert.equal(f.copied.at(-1),'Translated text');f.popup.destroy();});
 }

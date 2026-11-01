@@ -2,7 +2,7 @@
 .qtranslate-tools {spacing:8px;}
 .qtranslate-tool {color:#a999ef;padding:3px 6px;border-radius:5px;}
 .qtranslate-tool:hover {background-color:#363a48;}
-.qtranslate-text {color:#eeedf2;font-size:18px;}
+.qtranslate-text {color:#eeedf2;font-size:18px;selection-background-color:#6e5799;selected-color:#ffffff;}
 .qtranslate-status {color:#a999ef;font-size:12px;}
 .qtranslate-capture {background-color:rgba(0,0,0,0.18);}
 .qtranslate-rectangle {border:2px solid #a999ef;background-color:rgba(169,153,239,0.12);}
