@@ -13,6 +13,52 @@ from qtranslate.desktop.tui_selection import active_terminal, CODEX_COPY
 
 
 class TuiSelectionTests(unittest.TestCase):
+    def test_structured_chat_without_a_terminal_uses_native_selection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "profiles/test").mkdir(parents=True)
+            (root / "orca-profile-index.json").write_text(
+                json.dumps({"activeProfileId": "test"})
+            )
+            session = {
+                "activeWorktreeId": "workspace",
+                "activeTabId": None,
+                "activeTabTypeByWorktree": {"workspace": "agent-session"},
+                "activeTabIdByWorktree": {"workspace": None},
+                "activeGroupIdByWorktree": {"workspace": "group"},
+                "tabGroups": {
+                    "workspace": [{"id": "group", "activeTabId": "chat"}]
+                },
+                "unifiedTabs": {
+                    "workspace": [
+                        {"id": "chat", "groupId": "group", "contentType": "agent-session"}
+                    ]
+                },
+            }
+            with sqlite3.connect(root / "profiles/test/profile-state.db") as db:
+                db.execute(
+                    "CREATE TABLE profile_state_documents (domain TEXT, payload TEXT)"
+                )
+                db.execute(
+                    "INSERT INTO profile_state_documents VALUES (?, ?)",
+                    ("workspaceSession", json.dumps(session)),
+                )
+            with (
+                patch.dict(tui_selection.os.environ, {"ORCA_USER_DATA_PATH": tmp}),
+                patch.object(tui_selection, "cli") as cli,
+            ):
+                self.assertEqual(tui_selection.profile(), {"agentIdentity": "native"})
+                cli.assert_not_called()
+                # Missing/mismatched tab metadata must still fail closed.
+                session["tabGroups"]["workspace"][0]["activeTabId"] = "unknown"
+                with sqlite3.connect(root / "profiles/test/profile-state.db") as db:
+                    db.execute(
+                        "UPDATE profile_state_documents SET payload=?",
+                        (json.dumps(session),),
+                    )
+                with self.assertRaisesRegex(ValueError, "TUI_SOURCE_UNAVAILABLE"):
+                    tui_selection.profile()
+
     def test_only_new_orca_publisher_process_is_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -5,6 +5,57 @@ import unittest
 
 
 class ClipboardBrokerTests(unittest.TestCase):
+    def test_external_utf8_charset_alias_does_not_block_repeated_snapshots(self):
+        code = """
+from qtranslate.desktop.clipboard import ClipboardBroker,Gdk,GLib
+import subprocess,sys
+original={'text/plain;charset=utf-8':'Tiếng Việt'.encode(),'text/plain;charset=UTF-8':'Tiếng Việt'.encode(),'text/html':b'<b>Original</b>','image/png':b'\\x00PNG\\xff'}
+provider_code='''
+from qtranslate.desktop.clipboard import ClipboardBroker,Gdk,GLib
+b=ClipboardBroker()
+original=ORIGINAL
+b.clip.set_content(Gdk.ContentProvider.new_union([Gdk.ContentProvider.new_for_bytes(k,GLib.Bytes.new(v)) for k,v in original.items()]))
+print('READY',flush=True)
+GLib.MainLoop().run()
+'''.replace('ORIGINAL',repr(original))
+provider=subprocess.Popen([sys.executable,'-c',provider_code],stdout=subprocess.PIPE,text=True)
+try:
+ assert provider.stdout.readline().strip()=='READY'
+ b=ClipboardBroker();loop=GLib.MainLoop();errors=[];snapshots=[]
+ # Codex advertises the alias but rejects that SelectionRequest. A GTK
+ # provider serves both, so replay the rejection at the async read boundary.
+ from qtranslate.desktop.clipboard import Gio
+ class RejectAlias:
+  def __init__(self,clip):self.clip=clip;self.unsupported=object()
+  def __getattr__(self,name):return getattr(self.clip,name)
+  def read_async(self,mimes,priority,cancel,callback):
+   if mimes==['text/plain;charset=UTF-8']:
+    GLib.idle_add(lambda:(callback(self,self.unsupported),False)[1])
+   else:self.clip.read_async(mimes,priority,cancel,callback)
+  def read_finish(self,result):
+   if result is self.unsupported:
+    raise GLib.Error.new_literal(Gio.io_error_quark(),'Unsupported alias',Gio.IOErrorEnum.NOT_FOUND)
+   return self.clip.read_finish(result)
+ b.clip=RejectAlias(b.clip)
+ def saved(token,error):
+  if error:errors.append(error);loop.quit();return
+  if b.saved[token]['formats']!=original:errors.append('Original MIME bytes changed')
+  snapshots.append(token)
+  if len(snapshots)==1:
+   if not b.restore(token,b.serial):errors.append('Restore failed')
+   b.snapshot(saved)
+  else:
+   b.discard(token);loop.quit()
+ b.snapshot(saved)
+ GLib.timeout_add_seconds(4,lambda:(errors.append('TIMEOUT'),loop.quit(),False)[2]);loop.run()
+ assert not errors,errors
+ assert len(snapshots)==2,snapshots
+finally:
+ provider.terminate();provider.wait()
+print('CLIPBOARD_RESTORED')
+"""
+        self.run_clipboard_script(code)
+
     def test_new_user_copy_is_preserved_instead_of_restoring_old_snapshot(self):
         code = """
 from qtranslate.desktop.clipboard import ClipboardBroker,Gdk,GLib

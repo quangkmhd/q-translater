@@ -70,6 +70,7 @@ class ClipboardBroker:
                 return
         serial = self.serial
         formats = list(self.clip.get_formats().get_mime_types())
+        offered = set(formats)
         values = {}
         total = 0
         cancel = Gio.Cancellable()
@@ -110,12 +111,33 @@ class ClipboardBroker:
                 finish()
                 return
             mime = formats.pop(0)
+            read_mime = mime
 
             def opened(clipboard, result):
-                nonlocal stream, total
+                nonlocal stream, total, read_mime
                 try:
                     stream, actual = clipboard.read_finish(result)
-                except GLib.Error:
+                except GLib.Error as error:
+                    # Codex/X11 may advertise this UTF-8 alias but refuse its
+                    # target. Retry the equivalent spelling only when offered;
+                    # keep the original format name and all non-text bytes.
+                    canonical = "text/plain;charset=utf-8"
+                    if (
+                        read_mime == "text/plain;charset=UTF-8"
+                        and canonical in offered
+                        and any(
+                            error.matches(Gio.io_error_quark(), code)
+                            for code in (
+                                Gio.IOErrorEnum.NOT_SUPPORTED,
+                                Gio.IOErrorEnum.NOT_FOUND,
+                            )
+                        )
+                    ):
+                        read_mime = canonical
+                        self.clip.read_async(
+                            [read_mime], GLib.PRIORITY_DEFAULT, cancel, opened
+                        )
+                        return
                     finish("CLIPBOARD_UNAVAILABLE")
                     return
                 chunks = []
