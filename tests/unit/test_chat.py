@@ -69,6 +69,53 @@ class SessionTests(unittest.TestCase):
 
 
 class ChatEngineTests(unittest.TestCase):
+    def test_long_stream_does_not_disappear_and_restart_after_five_seconds(self):
+        with tempfile.TemporaryDirectory() as d:
+            store = SecretStore(Path(d) / "keys.json")
+            store.merge(bundle())
+            clock = FakeClock()
+            session = ChatSession()
+            request = session.begin("Explain this in detail.")
+            displayed = []
+            attempts = []
+
+            class Adapter:
+                def run(self, payload, candidate, deadline, cancel, on_delta):
+                    attempts.append(candidate)
+                    if len(attempts) > 1:
+                        on_delta(ProviderChunk("A different answer"))
+                        return ProviderResponse("A different answer", True, "stop")
+                    clock.advance(1)
+                    on_delta(ProviderChunk("The original answer"))
+                    clock.advance(3)
+                    on_delta(ProviderChunk(" keeps growing"))
+                    clock.advance(2)
+                    if clock.monotonic() >= deadline:
+                        return ProviderResponse(error_code="KEY_TIMEOUT")
+                    on_delta(ProviderChunk(" beyond five seconds."))
+                    return ProviderResponse(
+                        "The original answer keeps growing beyond five seconds.",
+                        True,
+                        "stop",
+                    )
+
+            def update(event):
+                session.apply(event)
+                displayed.append(session.turns[-1].text)
+
+            engine = Engine(store, Path(d) / "route.json", Adapter(), clock=clock)
+            self.addCleanup(engine.close)
+            result = engine(request, defaults(), 30, threading.Event(), update)
+            update(result)
+            for before, after in zip(displayed, displayed[1:]):
+                self.assertTrue(after.startswith(before), (before, after))
+            self.assertEqual(len(attempts), 1)
+            self.assertEqual(result.state, "success")
+            self.assertEqual(
+                session.history[-1]["content"],
+                "The original answer keeps growing beyond five seconds.",
+            )
+
     def test_chat_is_one_full_context_request_and_success_does_not_require_copy(self):
         with tempfile.TemporaryDirectory() as d:
             store = SecretStore(Path(d) / "keys.json")
@@ -102,10 +149,10 @@ class ChatEngineTests(unittest.TestCase):
             self.assertEqual(seen[0][0]["messages"], messages)
             self.assertEqual(seen[0][0]["text"], source)
             self.assertEqual(seen[0][0]["prompt"], defaults()["prompt_chat"])
-            self.assertEqual(seen[0][1], 5)
+            self.assertEqual(seen[0][1], 30)
             self.assertEqual(updates[0].text, "The answer.")
 
-    def test_fallback_retains_history_and_replaces_failed_partial(self):
+    def test_fallback_before_output_retains_history(self):
         with tempfile.TemporaryDirectory() as d:
             store = SecretStore(Path(d) / "keys.json")
             store.merge(bundle())
@@ -116,7 +163,6 @@ class ChatEngineTests(unittest.TestCase):
                 def run(self, p, c, deadline, cancel, on_delta):
                     payloads.append(p)
                     if len(payloads) == 1:
-                        on_delta(ProviderChunk("Wrong partial"))
                         return ProviderResponse(error_code="NETWORK_ERROR")
                     on_delta(ProviderChunk("Correct"))
                     return ProviderResponse("Correct", True, "stop")
@@ -134,6 +180,64 @@ class ChatEngineTests(unittest.TestCase):
             self.assertEqual(r.text, "Correct")
             self.assertEqual([p["messages"] for p in payloads], [messages, messages])
             self.assertEqual(updates[-1].text, "Correct")
+
+    def test_failed_visible_stream_is_kept_without_retry_or_history(self):
+        for error in ("NETWORK_ERROR", "INCOMPLETE_OUTPUT", "KEY_TIMEOUT"):
+            with self.subTest(error=error), tempfile.TemporaryDirectory() as d:
+                store = SecretStore(Path(d) / "keys.json")
+                store.merge(bundle())
+                session = ChatSession()
+                request = session.begin("Question")
+                attempts = []
+
+                class Adapter:
+                    def run(self, p, c, deadline, cancel, on_delta):
+                        attempts.append(c)
+                        on_delta(ProviderChunk("Keep this partial answer"))
+                        return ProviderResponse(error_code=error)
+
+                engine = Engine(
+                    store, Path(d) / "route.json", Adapter(), clock=FakeClock()
+                )
+                self.addCleanup(engine.close)
+                result = engine(
+                    request, defaults(), 30, threading.Event(), session.apply
+                )
+                session.apply(result)
+                self.assertEqual(len(attempts), 1)
+                self.assertEqual(result.state, "error")
+                self.assertEqual(result.error_code, error)
+                self.assertEqual(session.turns[-1].text, "Keep this partial answer")
+                self.assertIsNone(session.active_id)
+                self.assertEqual(session.history, [])
+
+    def test_chat_stream_still_respects_task_deadline(self):
+        with tempfile.TemporaryDirectory() as d:
+            store = SecretStore(Path(d) / "keys.json")
+            store.merge(bundle())
+            clock = FakeClock()
+            clock.advance(28)
+            session = ChatSession()
+            request = session.begin("Question")
+            deadlines = []
+
+            class Adapter:
+                def run(self, p, c, deadline, cancel, on_delta):
+                    deadlines.append(deadline)
+                    on_delta(ProviderChunk("On time"))
+                    clock.advance(2)
+                    on_delta(ProviderChunk("Too late"))
+                    return ProviderResponse("On timeToo late", True, "stop")
+
+            engine = Engine(store, Path(d) / "route.json", Adapter(), clock=clock)
+            self.addCleanup(engine.close)
+            result = engine(request, defaults(), 30, threading.Event(), session.apply)
+            session.apply(result)
+            self.assertEqual(deadlines, [30])
+            self.assertEqual(result.state, "error")
+            self.assertEqual(result.error_code, "KEY_TIMEOUT")
+            self.assertEqual(session.turns[-1].text, "On time")
+            self.assertEqual(session.history, [])
 
     def test_defaults_merge_old_shortcuts_and_concise_chat_prompt(self):
         from qtranslate.config.settings import SettingsStore

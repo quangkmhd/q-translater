@@ -10,7 +10,7 @@
 - Cửa sổ chat/cài đặt ẩn khỏi dock và danh sách chuyển cửa sổ; dùng icon thanh trên hoặc phím tắt để mở.
 - Dashboard: provider/model riêng cho text/ảnh, thứ tự fallback, import/export, prompt, phím tắt, cỡ chữ và nhật ký.
 
-Mỗi lần gọi AI có tối đa **5 giây cho toàn bộ output**, tổng tác vụ 30 giây. Dùng lại cặp key/model thành công, hết vòng fallback quay lại từ đầu ở tác vụ tiếp theo. Model yêu cầu thinking hoặc OpenRouter trả phí bị loại.
+Alt+V/X có tối đa **5 giây cho toàn bộ output mỗi lần gọi AI**, tổng tác vụ 30 giây. Chat Alt+D dùng tối đa **30 giây cho cả câu trả lời**; chỉ thử provider tiếp theo khi chưa hiện text. Nếu luồng chat bị lỗi sau khi đã hiện text, giữ đoạn đang có và báo lỗi để bạn gửi lại. Dùng lại cặp key/model thành công, hết vòng fallback quay lại từ đầu ở tác vụ tiếp theo. Model yêu cầu thinking hoặc OpenRouter trả phí bị loại.
 
 ## Chạy thử
 
