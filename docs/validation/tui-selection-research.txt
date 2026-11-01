@@ -33,3 +33,24 @@ reports/real-codex-free-selection-verification.json: Alt+C acquisition fresh and
 reports/real-codex-no-selection-verification.json: empty selection regression (see actual status).
 
 The clipboard helper needs XWayland and libxres1 on GNOME Wayland. Local testing extracted Ubuntu's libxres1 under ~/.local/lib; no sudo/system package change was made. The .deb declares both dependencies.
+
+5. Alt+C/Alt+V regression fixes — 2026-11-01
+
+Structured Orca agent-session tabs are Electron text, not Codex terminal panes.
+Their legacy activeTabId is null. Reproduced TUI_SOURCE_UNAVAILABLE in the live
+profile and a SQLite-backed regression test. activeTabIdByWorktree can also be
+null while a chat is visible. The adapter now resolves the focused tab group,
+validates its active structured tab against unifiedTabs and returns native text
+selection; unknown/mismatched metadata still fails closed.
+
+The live Codex X11 clipboard advertised both text/plain;charset=utf-8 and
+text/plain;charset=UTF-8, but reading the latter returned G_IO_ERROR_NOT_FOUND.
+This blocked clipboard snapshots and subsequent shortcuts. The broker retries
+that alias through the offered lowercase spelling only for NOT_FOUND or
+NOT_SUPPORTED, preserving the original MIME names and bytes. A live snapshot
+passed after the fix. The regression replays the read rejection over an external
+clipboard provider and checks repeated snapshot/restore with Unicode, HTML and
+binary data. Full suite: 148 Python tests and 36 extension tests passed.
+Installed both adapter fixes and restarted the backend. In the live structured
+chat, compositor-generated Alt+C and Alt+V both acquired the selection and
+completed successfully (translator 0.5774s; rewrite provider 3.5735s).

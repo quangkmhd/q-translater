@@ -117,17 +117,49 @@ def gui_source():
         sqlite3.connect(path.as_uri() + "?mode=ro", uri=True, timeout=0.3)
     ) as db:
         row = db.execute(
-            "SELECT json_extract(payload, '$.activeWorktreeId'), "
-            "json_extract(payload, '$.activeTabId') "
+            "SELECT payload "
             "FROM profile_state_documents WHERE domain='workspaceSession'"
         ).fetchone()
-    if not row or not all(isinstance(x, str) and x for x in row):
+    if not row:
         raise ValueError("TUI_SOURCE_UNAVAILABLE")
-    return row
+    session = json.loads(row[0])
+    workspace = session.get("activeWorktreeId")
+    if not isinstance(workspace, str) or not workspace:
+        raise ValueError("TUI_SOURCE_UNAVAILABLE")
+    if session.get("activeTabTypeByWorktree", {}).get(workspace) == "agent-session":
+        tab = session.get("activeTabIdByWorktree", {}).get(workspace)
+        group_id = session.get("activeGroupIdByWorktree", {}).get(workspace)
+        if group_id is not None:
+            groups = [
+                group
+                for group in session.get("tabGroups", {}).get(workspace, [])
+                if group.get("id") == group_id
+            ]
+            if len(groups) != 1:
+                raise ValueError("TUI_SOURCE_UNAVAILABLE")
+            # Orca's legacy per-worktree tab may be null in a structured chat;
+            # its focused group's active tab remains the current UI identity.
+            tab = groups[0].get("activeTabId")
+        tabs = session.get("unifiedTabs", {}).get(workspace, [])
+        if not isinstance(tab, str) or not any(
+            item.get("id") == tab and item.get("contentType") == "agent-session"
+            and (group_id is None or item.get("groupId") == group_id)
+            for item in tabs
+        ):
+            raise ValueError("TUI_SOURCE_UNAVAILABLE")
+        # Structured chats are native Electron text, with no terminal/PTY.
+        # None explicitly routes them through the Shell's PRIMARY reader.
+        return workspace, None
+    tab = session.get("activeTabId")
+    if not isinstance(tab, str) or not tab:
+        raise ValueError("TUI_SOURCE_UNAVAILABLE")
+    return workspace, tab
 
 
 def profile():
     workspace, tab = gui_source()
+    if tab is None:
+        return {"agentIdentity": "native"}
     data = cli(
         [
             "terminal",
