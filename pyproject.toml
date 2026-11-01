@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "q-translate"
+version = "0.1.0"
+description = "English/Vietnamese desktop translation for Ubuntu GNOME"
+requires-python = ">=3.12"
+[project.scripts]
+qtranslate = "qtranslate.__main__:main"
+[tool.setuptools.packages.find]
+where = ["src"]

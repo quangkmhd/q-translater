@@ -1,0 +1,11 @@
+{
+  "uuid": "qtranslate@local",
+  "name": "Q Translate",
+  "description": "English/Vietnamese selection translation and AI rewriting",
+  "shell-version": [
+    "46",
+    "50"
+  ],
+  "settings-schema": "org.qtranslate.desktop",
+  "version": 1
+}

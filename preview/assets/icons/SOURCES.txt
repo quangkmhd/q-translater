@@ -1,0 +1,3 @@
+System symbolic icons copied unchanged from Adwaita (GNOME) and Yaru (Ubuntu).
+Sources: /usr/share/icons/Adwaita/symbolic and /usr/share/icons/Yaru/scalable.
+Brand/provider names are plain text, not reproduced provider logos.

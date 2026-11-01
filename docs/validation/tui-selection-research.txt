@@ -1,0 +1,35 @@
+TUI selection research — 2026-11-01
+
+Verified installed target: Codex CLI v0.166.0 in Orca on Ubuntu 26.04 GNOME 50 Wayland.
+
+1. Why PRIMARY can be stale
+Codex's primary.rs deliberately requires DISPLAY and the absence of WAYLAND_DISPLAY. On Wayland its transcript selection is internal and does not publish PRIMARY. Waiting for PRIMARY cannot fix that path.
+https://github.com/openai/codex/blob/rust-v0.166.0/codex-rs/tui/src/clipboard_copy/primary.rs
+Context7 /openai/codex returned the same condition. Exact installed-version source was checked separately.
+
+2. Codex acquisition implemented
+text_selection.rs accepts Ctrl+Insert for selected transcript copy. Orca terminal send without --enter writes the CSI control sequence verbatim. Do not use /copy: it copies the last response, not necessarily the selected substring. Do not send Ctrl+C or Enter into source terminals.
+https://github.com/openai/codex/blob/rust-v0.166.0/codex-rs/tui/src/text_selection.rs
+
+The adapter identifies the GUI workspace/tab/leaf using read-only Orca profile metadata plus live terminal topology. CLI --worktree active means caller cwd; it must not identify the GUI source. It requires a unique local Codex process bound to ORCA_TERMINAL_HANDLE and a selection footer. Ambiguous layouts/sources fail without using old PRIMARY.
+
+Original clipboard MIME bytes are temporarily held in RAM. X11 clipboard ownership is checked with XRes client PIDs. This machine routes Codex copy through a new Orca clipboard-publisher process: the adapter permits only a user-owned publisher executable in Orca's publisher directory started after the copy request, then pins that exact owner/PID during reading/restoration. Existing/unrelated owners and additional clipboard writes fail without overwriting the newer clipboard. CLI acknowledgement failure still attempts attributed cleanup. This is an Orca-specific compatibility adapter, not a universal TUI selection API. Orca profile/schema/publisher changes may require an adapter update.
+https://lists.gnome.org/archives/commits-list/2022-March/msg10404.html
+Context7 did not find a relevant Xlib/XRes library; the installed Ubuntu libxres-dev header and the primary GNOME implementation were used.
+
+3. Other coding TUIs
+Claude Code fullscreen owns mouse selection and supports copy-on-select; its documented configuration and copy shortcuts differ from Codex. No Claude runtime acceptance claim is made.
+https://code.claude.com/docs/en/fullscreen
+
+Gemini CLI documents F9 copy mode and Ctrl+S mouse-mode toggle. Its /copy command copies the last output rather than an arbitrary selected substring. No Gemini runtime acceptance claim is made.
+https://github.com/google-gemini/gemini-cli/blob/main/docs/reference/keyboard-shortcuts.md
+
+A terminal's native selection can often be forced with Shift+drag when a TUI captures the mouse; modifier behavior depends on the emulator. This is a manual workaround, not a universal automatic API.
+https://help.gnome.org/gnome-terminal/txt-select-text.html
+
+4. Evidence
+reports/real-codex-selection-verification.json: actual mouse drag + Alt+V, fresh Codex greeting39chars, PRIMARY unchanged, successful streaming and clipboard equals complete result, 4.185 seconds in this run.
+reports/real-codex-free-selection-verification.json: Alt+C acquisition fresh and original clipboard preserved. Translation itself returned FREE_RATE_LIMITED (Google429/Bing401), a separate provider-availability failure.
+reports/real-codex-no-selection-verification.json: empty selection regression (see actual status).
+
+The clipboard helper needs XWayland and libxres1 on GNOME Wayland. Local testing extracted Ubuntu's libxres1 under ~/.local/lib; no sudo/system package change was made. The .deb declares both dependencies.

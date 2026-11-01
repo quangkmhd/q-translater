@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Q Translate
+Exec=qtranslate serve
+Terminal=false
+X-GNOME-Autostart-enabled=true

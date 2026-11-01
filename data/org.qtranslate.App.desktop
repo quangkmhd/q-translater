@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Q Translate
+Comment=Translate English and Vietnamese from selected text
+Exec=qtranslate settings
+Icon=accessories-dictionary
+Terminal=false
+Categories=Utility;
+StartupNotify=true

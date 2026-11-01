@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Q Translate · Alt+D</title>
+  <style>:root{color-scheme:dark;--bg:#20222b;--surface:#282b36;--border:#484b5b;--text:#eeedf4;--muted:#a0a2b5;--accent:#b6a1f1;--focus:#c5b5ff;font-family:Inter,"Noto Sans",system-ui,sans-serif;font-size:14px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100dvh}button,textarea{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:default}button:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}button img{width:17px;height:17px}button{transition:background .15s}button[hidden],[hidden]{display:none!important}.preview-header{padding:24px 36px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#d5d4df;gap:16px}.divider{margin:0 13px;color:#656978}.preview-badge{font-size:9px;letter-spacing:1px;color:#a4a0b6;border:1px solid #3c3f4e;padding:7px 10px;border-radius:5px}main{min-height:calc(100dvh - 148px);display:flex;align-items:center;justify-content:center;gap:clamp(48px,8vw,145px);padding:45px 40px 70px}.preview-intro{max-width:320px;flex:0 1 320px}.eyebrow{font-size:10px;color:var(--accent);letter-spacing:1.7px}h1{font-size:46px;letter-spacing:-1.5px;font-weight:550;line-height:1.17;margin:20px 0 16px}.preview-intro>p{color:var(--muted);line-height:1.8;font-size:13px}.launch{display:flex;align-items:center;gap:38px;padding:13px 15px;background:#343041;border:1px solid #655779;border-radius:7px;font-size:12px;margin-top:27px}.launch:hover{background:#41384f}kbd{font-family:inherit;white-space:nowrap;font-size:10px;font-weight:400;border:1px solid #4c4b5b;background:#252631;color:#bab5cd;border-radius:4px;padding:3px 6px}.state-controls{display:flex;gap:3px;background:#262832;border:1px solid #3c3f4c;border-radius:7px;padding:3px;margin-top:30px;width:max-content}.state-controls button{border:0;background:transparent;color:#a8a7b9;border-radius:4px;padding:9px 10px;font-size:10px}.state-controls button:hover{background:#343540}.state-controls button.selected{background:#40394e;color:#e1d5fb}.preview-intro .browser-note{font-size:10px;color:#85889c;margin-top:15px}.prompt-details{margin-top:25px;color:#9192a6;font-size:11px}.prompt-details summary{cursor:pointer;width:max-content}.prompt-details p{white-space:pre-wrap;line-height:1.8;font-size:11px}.chat-window{width:580px;max-width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 24px 70px #0004;overflow:hidden;display:flex;flex-direction:column;flex:0 1 580px;max-height:min(690px,calc(100dvh - 190px));animation:appear .18s ease-out}.chat-header{display:flex;justify-content:space-between;align-items:center;padding:12px 13px 12px 20px;border-bottom:1px solid #3c3e4c;flex:none}.chat-heading{display:flex;gap:10px;align-items:center}.chat-heading>img{width:17px;height:17px;opacity:.9;filter:brightness(0) saturate(100%) invert(77%) sepia(14%) saturate(1291%) hue-rotate(211deg)}h2{font-size:13px;font-weight:550;margin:0}.chat-heading kbd{margin-left:5px;font-size:9px;padding:3px 6px;color:#aaa5bd}.window-actions{display:flex;gap:3px}.icon-button{width:29px;height:29px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:5px;padding:6px;opacity:.7}.icon-button:hover{background:#41404e;opacity:1}.conversation{overflow:auto;overscroll-behavior:contain;padding:23px 22px 17px;min-height:0;max-height:440px;scrollbar-width:thin;scrollbar-color:#565063 transparent;flex:1 1 auto}.empty-state{padding:24px 0 22px}.empty-state>p{font-size:18px;margin:0 0 11px;font-weight:450;letter-spacing:-.2px}.empty-state>span{font-size:12px;color:var(--muted);line-height:1.7}.suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-top:24px}.suggestions button{border:1px solid #4d485b;border-radius:6px;padding:8px 10px;background:#2e2b3a;color:#c8bedc;font-size:11px}.suggestions button:hover{background:#3a3349}.composer{margin:0 13px 13px;border:1px solid #555163;border-radius:8px;background:#22242f;padding:13px 14px 9px;flex:none;transition:border-color .15s}.composer:focus-within{border-color:#ad96dd;box-shadow:0 0 0 1px #9e88d222}textarea{resize:none;display:block;width:100%;max-height:144px;min-height:47px;padding:0;border:0;outline:0;background:transparent;color:#efecf5;font-size:14px;line-height:1.65;scrollbar-width:thin;overflow:auto}textarea::placeholder{color:#888799}.composer-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;min-height:29px}.composer-bottom>span{color:#828296;font-size:9px;display:flex;gap:5px;align-items:center}.composer-bottom kbd{border:0;background:transparent;font-size:9px;color:#9591a6;padding:0}.composer-bottom>span>span{margin:0 3px}.send-button{display:flex;align-items:center;justify-content:center;width:30px;height:29px;border:0;border-radius:6px;background:#b5a0ed;flex:none}.send-button img{filter:brightness(.18);width:20px;height:20px}.send-button:disabled{background:#454052;opacity:.55}.send-button:hover:enabled{background:#c8b4fc}.stop-button{height:29px;border:1px solid #736285;background:#3a3248;border-radius:5px;font-size:10px;padding:0 11px;color:#d9c9f5}.message{margin-bottom:22px;min-width:0;overflow-wrap:anywhere;animation:appear .15s ease-out}.message:last-child{margin-bottom:6px}.message.user{display:flex;justify-content:flex-end}.message.user .message-text{max-width:90%;padding:11px 14px;background:#3a3548;border:1px solid #51465e;border-radius:9px 9px 3px 9px;font-size:13px;line-height:1.75;white-space:pre-wrap;color:#eee6f6}.message.assistant .message-text{font-size:14px;line-height:1.85;white-space:pre-wrap;color:#ece9f2;padding:0 2px}.message-text strong{font-weight:600;color:#d1baf7}.reply-actions{display:flex;gap:3px;margin:9px 0 0 -4px}.reply-actions .icon-button{width:26px;height:25px}.reply-actions img{width:14px;height:14px}.waiting{display:flex;gap:5px;align-items:center;height:24px;padding:0 3px}.waiting span{width:5px;height:5px;background:#b6a1e1;border-radius:50%;animation:pulse 1.1s infinite}.waiting span:nth-child(2){animation-delay:.16s}.waiting span:nth-child(3){animation-delay:.32s}.streaming .message-text::after{content:"";display:inline-block;width:5px;height:13px;margin-left:4px;vertical-align:baseline;background:#b6a1e1;animation:pulse .85s infinite}.preview-footer{display:flex;justify-content:space-between;gap:16px;padding:18px 36px;color:#818395;font-size:10px;line-height:1.7}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+@media(max-width:900px){main{gap:40px;padding:35px 25px 50px}.preview-intro{flex-basis:220px}h1{font-size:37px}.chat-window{max-height:calc(100dvh - 180px)}.preview-header{padding:20px 25px}.preview-footer{padding:16px 25px}.state-controls button{font-size:9px;padding:8px 7px}}
+@media(max-width:650px){.preview-header{padding:18px;font-size:11px}.preview-badge{font-size:7px;letter-spacing:.3px;padding:6px}.divider{margin:0 7px}main{display:flex;flex-direction:column;gap:25px;padding:20px 16px 25px;min-height:0}.preview-intro{flex:auto;width:100%;max-width:none}.eyebrow,h1,.preview-intro>p:not(.browser-note){display:none}.launch{margin-top:0;padding:10px 13px;gap:20px}.state-controls{margin-top:15px}.preview-intro .browser-note{font-size:9px;margin:10px 0 0}.prompt-details{margin-top:13px}.chat-window{width:100%;flex:auto;max-height:70dvh;min-height:270px}.conversation{max-height:40dvh;padding:19px 16px 14px}.empty-state{padding:15px 0}.suggestions{margin-top:20px;gap:6px}.suggestions button{font-size:10px;padding:7px 8px}.chat-header{padding:10px 10px 10px 15px}.composer{margin:0 9px 9px;padding:12px 11px 8px}.preview-footer{padding:14px 18px;flex-direction:column;gap:4px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <header class="preview-header"><span>Q Translate <span class="divider">/</span> Trợ lý AI</span><span class="preview-badge">DEMO GIAO DIỆN · PHẢN HỒI MẪU</span></header>
+  <main>
+    <section class="preview-intro" aria-label="Điều khiển bản thử">
+      <span class="eyebrow">THÊM MỘT CÁCH ĐỂ HỎI</span>
+      <h1>Hỏi nhanh.<br>Làm tiếp.</h1>
+      <p>Một hộp chat nhỏ, ngay khi cần.</p>
+      <button class="launch" id="open-chat">Mở trợ lý <kbd>Alt D</kbd></button>
+      <div class="state-controls" aria-label="Xem các trạng thái">
+        <button data-state="empty" class="selected">Ô nhập</button>
+        <button data-state="loading">Đang trả lời</button>
+        <button data-state="result">Có kết quả</button>
+      </div>
+      <p class="browser-note">Nếu trình duyệt giữ Alt+D để mở thanh địa chỉ,<br>bấm “Mở trợ lý” để thử.</p>
+      <details class="prompt-details"><summary>Prompt đề xuất</summary><p id="system-prompt"></p></details>
+    </section>
+
+    <section class="chat-window" id="chat" role="dialog" aria-labelledby="chat-title" aria-describedby="chat-shortcuts">
+      <header class="chat-header">
+        <div class="chat-heading"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aCBkPSJtIDggMCBjIC00LjQxMDE1NiAwIC04IDMuNTg5ODQ0IC04IDggcyAzLjU4OTg0NCA4IDggOCBzIDggLTMuNTg5ODQ0IDggLTggcyAtMy41ODk4NDQgLTggLTggLTggeiBtIDAgMiBjIDMuMzMyMDMxIDAgNiAyLjY2Nzk2OSA2IDYgcyAtMi42Njc5NjkgNiAtNiA2IHMgLTYgLTIuNjY3OTY5IC02IC02IHMgMi42Njc5NjkgLTYgNiAtNiB6IG0gMCAxLjg3NSBjIC0wLjYyMTA5NCAwIC0xLjEyNSAwLjUwMzkwNiAtMS4xMjUgMS4xMjUgcyAwLjUwMzkwNiAxLjEyNSAxLjEyNSAxLjEyNSBzIDEuMTI1IC0wLjUwMzkwNiAxLjEyNSAtMS4xMjUgcyAtMC41MDM5MDYgLTEuMTI1IC0xLjEyNSAtMS4xMjUgeiBtIC0xLjUyMzQzOCAzLjEyNSBjIC0wLjI2NTYyNCAwLjAxMTcxOSAtMC40NzY1NjIgMC4yMzA0NjkgLTAuNDc2NTYyIDAuNSBjIDAgMC4yNzczNDQgMC4yMjI2NTYgMC41IDAuNSAwLjUgaCAwLjUgdiAzIGggLTAuNSBjIC0wLjI3NzM0NCAwIC0wLjUgMC4yMjI2NTYgLTAuNSAwLjUgcyAwLjIyMjY1NiAwLjUgMC41IDAuNSBoIDMgYyAwLjI3NzM0NCAwIDAuNSAtMC4yMjI2NTYgMC41IC0wLjUgcyAtMC4yMjI2NTYgLTAuNSAtMC41IC0wLjUgaCAtMC41IHYgLTQgaCAtMi41IGMgLTAuMDA3ODEyIDAgLTAuMDE1NjI1IDAgLTAuMDIzNDM4IDAgeiBtIDAgMCIvPgo8L3N2Zz4K" alt=""><h2 id="chat-title">Trợ lý AI</h2><kbd>Alt D</kbd></div>
+        <div class="window-actions"><button class="icon-button" id="new-chat" title="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aCBkPSJtIDcgMiBjIC0wLjgzMjAzMSAwIC0xLjU1ODU5NCAwLjM0Mzc1IC0yLjI5Mjk2OSAwLjc4MTI1IHMgLTEuNDY0ODQzIDEuMDAzOTA2IC0yLjEyODkwNiAxLjU5NzY1NiBjIC0wLjY2MDE1NiAwLjU5NzY1NiAtMS4yNTM5MDYgMS4yMjI2NTYgLTEuNzA3MDMxIDEuNzk2ODc1IGMgLTAuMjI2NTYzIDAuMjg5MDYzIC0wLjQxNzk2OSAwLjU2MjUgLTAuNTcwMzEzIDAuODM1OTM4IGMgLTAuMTUyMzQzIDAuMjc3MzQzIC0wLjMwMDc4MSAwLjUzMTI1IC0wLjMwMDc4MSAwLjk4ODI4MSBzIDAuMTQ4NDM4IDAuNzEwOTM4IDAuMzAwNzgxIDAuOTg0Mzc1IGMgMC4xNTIzNDQgMC4yNzczNDQgMC4zNDM3NSAwLjU1MDc4MSAwLjU3MDMxMyAwLjgzNTkzNyBjIDAuNDUzMTI1IDAuNTc4MTI2IDEuMDQ2ODc1IDEuMjAzMTI2IDEuNzA3MDMxIDEuNzk2ODc2IGMgMC42NjQwNjMgMC41OTc2NTYgMS4zOTQ1MzEgMS4xNjQwNjIgMi4xMjg5MDYgMS42MDE1NjIgcyAxLjQ2MDkzOCAwLjc4MTI1IDIuMjkyOTY5IDAuNzgxMjUgaCA2IGMgMS42NDQ1MzEgMCAzIC0xLjM1NTQ2OSAzIC0zIHYgLTYgYyAwIC0xLjY0NDUzMSAtMS4zNTU0NjkgLTMgLTMgLTMgeiBtIDEgMyBjIDAuMjY1NjI1IDAgMC41MTk1MzEgMC4xMDU0NjkgMC43MDcwMzEgMC4yOTI5NjkgbCAxLjI5Mjk2OSAxLjI5Mjk2OSBsIDEuMjkyOTY5IC0xLjI5Mjk2OSBjIDAuMTg3NSAtMC4xODc1IDAuNDQxNDA2IC0wLjI5Mjk2OSAwLjcwNzAzMSAtMC4yOTI5NjkgcyAwLjUxOTUzMSAwLjEwNTQ2OSAwLjcwNzAzMSAwLjI5Mjk2OSBjIDAuMzkwNjI1IDAuMzkwNjI1IDAuMzkwNjI1IDEuMDIzNDM3IDAgMS40MTQwNjIgbCAtMS4yOTI5NjkgMS4yOTI5NjkgbCAxLjI5Mjk2OSAxLjI5Mjk2OSBjIDAuMzkwNjI1IDAuMzkwNjI1IDAuMzkwNjI1IDEuMDIzNDM3IDAgMS40MTQwNjIgcyAtMS4wMjM0MzcgMC4zOTA2MjUgLTEuNDE0MDYyIDAgbCAtMS4yOTI5NjkgLTEuMjkyOTY5IGwgLTEuMjkyOTY5IDEuMjkyOTY5IGMgLTAuMzkwNjI1IDAuMzkwNjI1IC0xLjAyMzQzNyAwLjM5MDYyNSAtMS40MTQwNjIgMCBzIC0wLjM5MDYyNSAtMS4wMjM0MzcgMCAtMS40MTQwNjIgbCAxLjI5Mjk2OSAtMS4yOTI5NjkgbCAtMS4yOTI5NjkgLTEuMjkyOTY5IGMgLTAuMzkwNjI1IC0wLjM5MDYyNSAtMC4zOTA2MjUgLTEuMDIzNDM3IDAgLTEuNDE0MDYyIGMgMC4xODc1IC0wLjE4NzUgMC40NDE0MDYgLTAuMjkyOTY5IDAuNzA3MDMxIC0wLjI5Mjk2OSB6IG0gMCAwIiBmaWxsPSIjMmUzNDM2Ii8+Cjwvc3ZnPgo=" alt=""></button><button class="icon-button" id="close-chat" title="Đóng · Esc" aria-label="Đóng hộp chat"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aCBkPSJtIDQgNCBoIDEgaCAwLjAzMTI1IGMgMC4yNTM5MDYgMC4wMTE3MTkgMC41MTE3MTkgMC4xMjg5MDYgMC42ODc1IDAuMzEyNSBsIDIuMjgxMjUgMi4yODEyNSBsIDIuMzEyNSAtMi4yODEyNSBjIDAuMjY1NjI1IC0wLjIzMDQ2OSAwLjQ0NTMxMiAtMC4zMDQ2ODggMC42ODc1IC0wLjMxMjUgaCAxIHYgMSBjIDAgMC4yODUxNTYgLTAuMDM1MTU2IDAuNTUwNzgxIC0wLjI1IDAuNzUgbCAtMi4yODEyNSAyLjI4MTI1IGwgMi4yNSAyLjI1IGMgMC4xODc1IDAuMTg3NSAwLjI4MTI1IDAuNDUzMTI1IDAuMjgxMjUgMC43MTg3NSB2IDEgaCAtMSBjIC0wLjI2NTYyNSAwIC0wLjUzMTI1IC0wLjA5Mzc1IC0wLjcxODc1IC0wLjI4MTI1IGwgLTIuMjgxMjUgLTIuMjgxMjUgbCAtMi4yODEyNSAyLjI4MTI1IGMgLTAuMTg3NSAwLjE4NzUgLTAuNDUzMTI1IDAuMjgxMjUgLTAuNzE4NzUgMC4yODEyNSBoIC0xIHYgLTEgYyAwIC0wLjI2NTYyNSAwLjA5Mzc1IC0wLjUzMTI1IDAuMjgxMjUgLTAuNzE4NzUgbCAyLjI4MTI1IC0yLjI1IGwgLTIuMjgxMjUgLTIuMjgxMjUgYyAtMC4yMTA5MzggLTAuMTk1MzEyIC0wLjMwNDY4OCAtMC40Njg3NSAtMC4yODEyNSAtMC43NSB6IG0gMCAwIiBmaWxsPSIjMmUzNDM2Ii8+Cjwvc3ZnPgo=" alt=""></button></div>
+      </header>
+      <div class="conversation" id="conversation" role="log" aria-label="Cuộc trò chuyện" aria-live="off">
+        <div class="empty-state" id="empty-state"><p>Bạn cần mình giúp gì?</p><span>Dịch, giải thích, viết lại hoặc kiểm tra ngữ pháp.</span><div class="suggestions"><button data-sample="grammar">Sửa ngữ pháp</button><button data-sample="explain">Giải thích dễ hiểu</button><button data-sample="translate">Dịch một câu</button></div></div>
+      </div>
+      <form id="chat-form" class="composer">
+        <label for="message" class="sr-only">Nhập câu hỏi cho trợ lý AI</label>
+        <textarea id="message" rows="2" placeholder="Hỏi mình bất cứ điều gì…" autocomplete="off" spellcheck="false"></textarea>
+        <div class="composer-bottom"><span id="chat-shortcuts"><kbd>Enter</kbd> gửi <span>·</span> <kbd>Shift Enter</kbd> xuống dòng</span><button type="submit" id="send" class="send-button" title="Gửi" aria-label="Gửi câu hỏi" disabled><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aCBkPSJtIDEgMTEgYyAwIC0wLjI2NTYyNSAwLjEwNTQ2OSAtMC41MTk1MzEgMC4yOTI5NjkgLTAuNzA3MDMxIGwgNiAtNiBjIDAuMzkwNjI1IC0wLjM5MDYyNSAxLjAyMzQzNyAtMC4zOTA2MjUgMS40MTQwNjIgMCBsIDYgNiBjIDAuMTg3NSAwLjE4NzUgMC4yOTI5NjkgMC40NDE0MDYgMC4yOTI5NjkgMC43MDcwMzEgcyAtMC4xMDU0NjkgMC41MTk1MzEgLTAuMjkyOTY5IDAuNzA3MDMxIGMgLTAuMzkwNjI1IDAuMzkwNjI1IC0xLjAyMzQzNyAwLjM5MDYyNSAtMS40MTQwNjIgMCBsIC01LjI5Mjk2OSAtNS4yOTI5NjkgbCAtNS4yOTI5NjkgNS4yOTI5NjkgYyAtMC4zOTA2MjUgMC4zOTA2MjUgLTEuMDIzNDM3IDAuMzkwNjI1IC0xLjQxNDA2MiAwIGMgLTAuMTg3NSAtMC4xODc1IC0wLjI5Mjk2OSAtMC40NDE0MDYgLTAuMjkyOTY5IC0wLjcwNzAzMSB6IG0gMCAwIiBmaWxsPSIjMmUzNDM2Ii8+Cjwvc3ZnPgo=" alt=""></button><button type="button" id="stop" class="stop-button" hidden>Dừng</button></div>
+      </form>
+      <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="preview-footer"><span>Đề xuất: giữ cuộc trò chuyện khi bấm ra ngoài · đóng bằng Esc hoặc ×</span><span>Không gọi API · không lưu nội dung</span></footer>
+  <script>'use strict';
+// Throwaway UI review: deterministic sample replies, no API or persistence.
+const systemPrompt = `Bạn là trợ lý AI giúp người dùng làm việc và học tiếng Anh. Bạn có thể trò chuyện, trả lời câu hỏi, giải thích, dịch, viết lại câu và sửa ngữ pháp.
+Làm đúng yêu cầu hiện tại của người dùng; không mặc định dịch hoặc viết lại mọi tin nhắn. Dùng ngữ cảnh cuộc trò chuyện để hiểu câu hỏi tiếp theo.
+Mặc định trả lời bằng tiếng Việt, trừ khi người dùng yêu cầu ngôn ngữ khác. Trả lời rõ ràng, ngắn gọn, dễ hiểu. Khi viết tiếng Anh, ưu tiên từ thông dụng và cách nói tự nhiên. Khi sửa ngữ pháp, đưa câu đúng trước và giải thích ngắn khi hữu ích.
+Nếu thiếu thông tin quan trọng, hỏi lại ngắn gọn. Không bịa thông tin hoặc khả năng mà bạn không có. Chỉ hiển thị câu trả lời dành cho người dùng, không hiển thị suy nghĩ nội bộ.`;
+const samples = {
+  grammar: {input:'Câu “I have went to work yesterday” sai ở đâu? Sửa và giải thích giúp mình.', output:'Bạn có thể nói:\n\n**I went to work yesterday.**\n\n“Yesterday” là một thời điểm đã kết thúc, nên dùng **quá khứ đơn**: go → went.\n\nNếu dùng hiện tại hoàn thành thì phải là “have gone”, nhưng không đi với “yesterday”.'},
+  explain: {input:'Giải thích “a” và “an” thật dễ hiểu, cho mình vài ví dụ.', output:'Dùng **a** trước âm phụ âm, **an** trước âm nguyên âm. Hãy nghe cách phát âm, đừng chỉ nhìn chữ cái.\n\n• a book — một cuốn sách\n• an apple — một quả táo\n• an hour — một giờ (chữ “h” không phát âm)\n• a university — một trường đại học (bắt đầu bằng âm “y”)'},
+  translate: {input:'Dịch câu này sang tiếng Anh tự nhiên: Mình đang bận một chút, lát nữa mình nhắn lại nhé.', output:'**I’m a bit busy right now. I’ll text you later.**\n\nCách nói này tự nhiên và phù hợp khi nhắn tin với bạn bè hoặc đồng nghiệp.'}
+};
+const $ = id => document.getElementById(id);
+let generation=0, timer=null, busy=false, activeReply=null, activeText='', previous='', followTail=true;
+$('system-prompt').textContent=systemPrompt;
+function announce(text){$('announcement').textContent=text;}
+function openChat(){ $('chat').hidden=false; $('message').focus(); }
+function resizeInput(){const el=$('message');el.style.height='auto';el.style.height=Math.min(el.scrollHeight,144)+'px';$('send').disabled=!el.value.trim();}
+function setBusy(value){busy=value;$('send').hidden=value;$('stop').hidden=!value;$('conversation').setAttribute('aria-busy',String(value));}
+function scrollEnd(){if(followTail)$('conversation').scrollTop=$('conversation').scrollHeight;}
+function formatText(node,text){
+  node.replaceChildren();
+  text.split(/(\*\*[^*]+\*\*)/g).forEach(part=>{
+    if(part.startsWith('**')&&part.endsWith('**')){const strong=document.createElement('strong');strong.textContent=part.slice(2,-2);node.append(strong);}
+    else node.append(document.createTextNode(part));
+  });
+}
+function message(role,text=''){
+  $('empty-state').hidden=true;
+  const el=document.createElement('div');el.className='message '+role;
+  const body=document.createElement('div');body.className='message-text';formatText(body,text);el.append(body);$('conversation').append(el);scrollEnd();return el;
+}
+function addCopy(el,text){
+  const tools=document.createElement('div');tools.className='reply-actions';
+  const copy=document.createElement('button');copy.type='button';copy.className='icon-button';copy.title='Sao chép câu trả lời';copy.setAttribute('aria-label','Sao chép câu trả lời');
+  const icon=document.createElement('img');icon.src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBoZWlnaHQ9IjE2cHgiIHZpZXdCb3g9IjAgMCAxNiAxNiIgd2lkdGg9IjE2cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aCBkPSJtIDAgMyBjIDAgLTEuNjQ0NTMxIDEuMzU1NDY5IC0zIDMgLTMgaCA1IGMgMS42NDQ1MzEgMCAzIDEuMzU1NDY5IDMgMyBjIDAgMC41NTA3ODEgLTAuNDQ5MjE5IDEgLTEgMSBzIC0xIC0wLjQ0OTIxOSAtMSAtMSBjIDAgLTAuNTcwMzEyIC0wLjQyOTY4OCAtMSAtMSAtMSBoIC01IGMgLTAuNTcwMzEyIDAgLTEgMC40Mjk2ODggLTEgMSB2IDUgYyAwIDAuNTcwMzEyIDAuNDI5Njg4IDEgMSAxIGMgMC41NTA3ODEgMCAxIDAuNDQ5MjE5IDEgMSBzIC0wLjQ0OTIxOSAxIC0xIDEgYyAtMS42NDQ1MzEgMCAtMyAtMS4zNTU0NjkgLTMgLTMgeiBtIDUgNSBjIDAgLTEuNjQ0NTMxIDEuMzU1NDY5IC0zIDMgLTMgaCA1IGMgMS42NDQ1MzEgMCAzIDEuMzU1NDY5IDMgMyB2IDUgYyAwIDEuNjQ0NTMxIC0xLjM1NTQ2OSAzIC0zIDMgaCAtNSBjIC0xLjY0NDUzMSAwIC0zIC0xLjM1NTQ2OSAtMyAtMyB6IG0gMiAwIHYgNSBjIDAgMC41NzAzMTIgMC40Mjk2ODggMSAxIDEgaCA1IGMgMC41NzAzMTIgMCAxIC0wLjQyOTY4OCAxIC0xIHYgLTUgYyAwIC0wLjU3MDMxMiAtMC40Mjk2ODggLTEgLTEgLTEgaCAtNSBjIC0wLjU3MDMxMiAwIC0xIDAuNDI5Njg4IC0xIDEgeiBtIDAgMCIgZmlsbD0iIzJlMzQzNiIvPgo8L3N2Zz4K';icon.alt='';copy.append(icon);
+  copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(text.replaceAll('**',''));copy.title='Đã sao chép';announce('Đã sao chép câu trả lời.');}catch{announce('Chưa sao chép được. Bạn có thể chọn câu trả lời và nhấn Ctrl+C.');copy.title='Chọn văn bản và nhấn Ctrl+C';}});
+  tools.append(copy);el.append(tools);
+}
+function finishReply(stopped=false){
+  clearTimeout(timer);timer=null;
+  if(activeReply){activeReply.classList.remove('streaming');const waiting=activeReply.querySelector('.waiting');if(waiting)waiting.remove();if(activeText)addCopy(activeReply,activeText);else activeReply.remove();}
+  activeReply=null;setBusy(false);announce(stopped?'Đã dừng trả lời.':'Trợ lý đã trả lời xong.');
+}
+function stopReply(){generation++;finishReply(true);}
+function resetChat(){
+  stopReply();$('conversation').querySelectorAll('.message').forEach(el=>el.remove());$('empty-state').hidden=false;$('message').value='';previous='';activeText='';followTail=true;resizeInput();openChat();
+}
+function answerFor(input){
+  const lower=input.toLowerCase();
+  if(/ngắn hơn|ngắn gọn|shorter/.test(lower)&&previous)return 'Ngắn gọn hơn:\n\n**I went to work yesterday.**\n\nCó “yesterday” → dùng quá khứ đơn “went”.';
+  if(/ví dụ|example/.test(lower)&&previous)return 'Thêm vài ví dụ về quá khứ đơn:\n\n• **I called you yesterday.** — Hôm qua mình đã gọi cho bạn.\n• **We had lunch together.** — Chúng mình đã ăn trưa cùng nhau.\n• **She went home early.** — Cô ấy về nhà sớm.\n\nNếu bạn muốn, mình có thể giúp bạn đặt một câu về hôm qua.';
+  if(/have went|yesterday|ngữ pháp/.test(lower))return samples.grammar.output;
+  if(/\ba\b.*\ban\b|mạo từ/.test(lower))return samples.explain.output;
+  if(/dịch|đang bận/.test(lower))return samples.translate.output;
+  if(/chào|hello|\bhi\b/.test(lower))return 'Chào bạn! Bạn muốn mình giúp gì? Bạn có thể hỏi một câu, nhờ dịch hoặc gửi câu tiếng Anh để mình kiểm tra.';
+  return 'Đây là phản hồi mẫu để bạn thử bố cục và hiệu ứng trả lời.\n\nBạn có thể thử câu hỏi **“I have went to work yesterday sai ở đâu?”**, rồi hỏi tiếp **“Cho mình thêm ví dụ”**. Bản demo này chưa gửi nội dung tới AI.';
+}
+function respond(input,output,{instant=false,hold=false}={}){
+  const token=++generation;followTail=true;message('user',input);activeReply=message('assistant');activeText='';previous=input;setBusy(true);
+  const waiting=document.createElement('div');waiting.className='waiting';waiting.setAttribute('aria-label','Đang chờ trả lời');for(let i=0;i<3;i++)waiting.append(document.createElement('span'));activeReply.prepend(waiting);scrollEnd();announce('Đang trả lời.');
+  if(hold)return;
+  function start(){
+    if(token!==generation)return;waiting.remove();activeReply.classList.add('streaming');
+    const chars=Array.from(output);let offset=0;
+    function tick(){
+      if(token!==generation)return;
+      offset=Math.min(chars.length,offset+(instant?chars.length:3));activeText=chars.slice(0,offset).join('');formatText(activeReply.querySelector('.message-text'),activeText);scrollEnd();
+      if(offset<chars.length)timer=setTimeout(tick,18);else finishReply();
+    }
+    tick();
+  }
+  timer=setTimeout(start,instant?0:650);
+}
+$('chat-form').addEventListener('submit',event=>{event.preventDefault();const input=$('message').value.trim();if(!input||busy)return;const output=answerFor(input);$('message').value='';resizeInput();respond(input,output);$('message').focus();});
+$('message').addEventListener('input',resizeInput);
+$('message').addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();$('chat-form').requestSubmit();}});
+$('conversation').addEventListener('scroll',()=>{const el=$('conversation');followTail=el.scrollHeight-el.scrollTop-el.clientHeight<36;});
+$('open-chat').addEventListener('click',openChat);
+$('close-chat').addEventListener('click',()=>{$('chat').hidden=true;$('open-chat').focus();});
+$('new-chat').addEventListener('click',resetChat);
+$('stop').addEventListener('click',stopReply);
+document.querySelectorAll('[data-sample]').forEach(button=>button.addEventListener('click',()=>{$('message').value=samples[button.dataset.sample].input;resizeInput();$('message').focus();}));
+document.querySelectorAll('[data-state]').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelectorAll('[data-state]').forEach(b=>b.classList.toggle('selected',b===button));resetChat();
+  const state=button.dataset.state;
+  if(state!=='empty')respond(samples.grammar.input,samples.grammar.output,{instant:state==='result',hold:state==='loading'});
+}));
+document.addEventListener('keydown',event=>{
+  if(event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&event.code==='KeyD'){event.preventDefault();openChat();}
+  if(event.key==='Escape'&&!$('chat').hidden){$('chat').hidden=true;$('open-chat').focus();}
+});
+openChat();resizeInput();
+</script>
+</body>
+</html>

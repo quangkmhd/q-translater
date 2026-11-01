@@ -1,0 +1,51 @@
+Azure Translator setup — 2026-11-01
+
+Alt+C now uses official Azure Translator standard NMT. It does not silently
+fall back to Google/Bing web endpoints or AI models. Alt+V and Alt+X retain
+their existing AI providers.
+
+1. Open https://portal.azure.com/ and sign in.
+2. Create a single-service Translator resource in an active subscription.
+3. Select region Global and pricing tier Free F0. If F0 is unavailable, stop;
+   do not select S1 as a replacement for this free setup.
+4. Open the new resource > Keys and Endpoint. Copy Key 1 and region.
+5. Q Translate > Dich vu & model > Alt+C: paste the key into the password
+   field, use global or the exact regional location, and choose Kiem tra & luu.
+   The app sends a short synthetic translation to verify authentication before
+   saving. The existing working keys are retained when this check fails.
+6. Alternatively import .env/TXT using AZURE_TRANSLATOR_KEY and
+   AZURE_TRANSLATOR_REGION. Numbered suffixes _2, _3 etc support more keys.
+   Imported unverified keys must be checked with Kiem tra key da import before
+   runtime or export. Verified portable JSON/TXT preserves key+region identity.
+
+Key storage remains private ~/.config/q-translate/credentials.json (0600).
+Export contains only verified credentials. Do not put actual keys in chat,
+source, screenshots, or package artifacts.
+
+F0 currently provides 2 million standard translation characters/month. On F0
+quota exhaustion, translation stops. The app cannot determine the Azure
+pricing tier from an API key and cannot make a paid resource free; verify F0
+in the Azure portal. It never changes the Azure subscription/pricing tier.
+
+Errors distinguish missing key, authentication/region, 403001 quota exhausted,
+429 throttling, other forbidden, network failure, and key/task timeouts.
+Each key attempt is capped at5s, task at30s including acquisition. Long text is
+processed without truncation using bounded requests; a failed key is not
+retried for every chunk. The successful key is preferred for remaining chunks
+and remembered after the whole task succeeds.
+
+Primary docs checked through Context7 /microsoftdocs/azure-ai-docs and Microsoft:
+https://learn.microsoft.com/en-us/azure/ai-services/translator/text-translation/reference/authentication
+https://learn.microsoft.com/en-us/azure/ai-services/translator/text-translation/reference/v3/translate
+https://learn.microsoft.com/en-us/azure/ai-services/translator/text-translation/reference/status-response-codes
+https://learn.microsoft.com/en-us/azure/ai-services/translator/service-limits
+https://www.microsoft.com/en-us/translator/business/faq/
+
+User supplied a working global Translator credential on 2026-11-01. Real EN→VI,
+VI→EN and mixed→VI probes pass; the mixed vi→vi auto-detection echo was fixed
+using an explicit English source for mixed clauses targeting Vietnamese.
+The supplied key is active and included with the existing AI credentials/model
+bindings in exports/q-translate-import.txt (0600). See
+reports/azure-translator-live-verification.json. Resource creation via browser
+was not performed; the user supplied the credential after the browser-origin
+permission blocked that earlier attempt. The key alone cannot confirm F0 tier.

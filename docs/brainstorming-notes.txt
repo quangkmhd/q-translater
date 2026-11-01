@@ -1,0 +1,168 @@
+Q TRANSLATE — GHI CHÚ KHẢO SÁT, CHƯA PHẢI THIẾT KẾ ĐÃ DUYỆT
+Ngày: 2026-11-01
+
+CẬP NHẬT SAU THẢO LUẬN
+- Đã chốt review mới: Alt+V hiện streaming; copy khi hoàn tất rồi đếm 30s.
+  Mỗi lượt key AI tối đa 5s để trả xong output; toàn tác vụ vẫn 30s.
+  Import gộp và bỏ trùng; dashboard đề xuất đã được người dùng chấp nhận.
+  Không mở rộng thiết kế riêng lỗi giữa stream ở bản đầu.
+- Đã chốt dùng model nhanh trước theo TTFT: mặc định Cloudflare/Llama 70B.
+  Trong Cloudflare: Llama → Gemma → GLM; sau đó NVIDIA, Ollama, Google,
+  OpenRouter. Key trước/provider sau. Xóa startup override Gemma cũ;
+  tác vụ thành công sau vẫn được nhớ. Đã cập nhật .env/TXT/dashboard.
+- Mạng đã thông sau khi người dùng đổi quyền phiên sang Full Access; DNS,
+  HTTPS và ctx7 CLI đã chạy thật thành công. Audit đã phân loại 220 credential.
+- Người dùng yêu cầu TẮT THINKING; không chỉ ẩn reasoning. Loại model
+  mandatory-thinking khỏi pool. Cloudflare dùng model mạnh Free tier,
+  không chọn Llama 1B/8B làm mặc định.
+- Đã đo mẫu Cloudflare thinking off: GLM-4.7-Flash median 0,6086s,
+  Llama3.3 70B Fast 0,6598s, Gemma4 26B A4B 1,2256s (3 câu/một key).
+  Các số này là pilot, chưa phải số đo toàn bộ key.
+- Mới nhất: chỉ xuất TXT chứa key/model đã gọi API thành công. Không đưa
+  unverified, trùng, lỗi vào file import. Active .env/TXT có 99 credential text
+  đã chạy + Tavily/Jina; 31 Google chưa có inference do quota/auth-only bị loại.
+  Có backup gốc riêng tư; vision chưa thử. Pot đã clone thành công.
+- Nhớ provider/key/model thành công gần nhất qua restart; lỗi mới fallback
+  key trước/provider sau theo tốc độ đo, hết vòng quay về đầu, deadline 30s.
+- CLI hiện 0.166.0, không hạ xuống 0.161. Chưa chứng minh cài Orca sai.
+  Lỗi socket EPERM cũ đã hết sau khi đổi Full Access, không sửa DNS hệ thống.
+- SAU REVIEW: Alt+V kết quả dài có cuộn, thêm icon copy lại.
+- Lỗi chỉ cần hiện lên màn hình; log input/output/lỗi, tự clear mỗi 24 giờ.
+  Log che credential; không có kho lịch sử lâu dài riêng.
+- Autostart tự bật sau setup. Không đặt trần ký tự của app.
+- Timeout đã trả lời rõ: 30 giây CHO TOÀN BỘ tác vụ gồm mọi fallback.
+  Key hợp lệ kế tiếp trước, rồi mới provider kế tiếp; không reset deadline.
+- Alt+X và đoạn trộn Anh/Việt dịch về Việt đã được đồng ý.
+- Đã cập nhật dashboard HTML bằng metadata audit để duyệt: preview/q-translate-dashboard.html.
+  Demo không gọi API thật hoặc đọc secret. Các lựa chọn cũ trái với cập nhật
+  trên (ngưỡng độ dài, no input/output log, timeout 10/60 giây) đã bị thay thế.
+- Alt+V: khung kết quả giữ đến khi bấm đóng hoặc đủ 30 giây từ lúc có
+  kết quả; Alt+V mới chuyển cùng khung sang loading mới, hủy timer cũ,
+  đếm lại khi có kết quả mới. Bấm ngoài/chuyển app không đóng khung này.
+- Alt+V kết quả: người dùng yêu cầu bỏ “Đã copy tiếng Anh” và
+  “Bạn có thể dán ngay”; ảnh tối giản mới chỉ giữ kết quả, dấu tích, đóng:
+  docs/design/alt-v-success-minimal-proposed.png.
+- Alt+V loading đã chọn MẪU 2: thông báo nhỏ góc dưới bên phải.
+  Ảnh: docs/design/alt-v-loading-approved.png.
+- Đã vẽ trạng thái copy thành công kèm xem nhanh kết quả, CHỜ REVIEW:
+  docs/design/alt-v-success-proposed.png (ảnh cũ, đã thay bằng bản tối giản).
+- QUYẾT ĐỊNH MỚI NHẤT: Alt+V = AI viết lại tiếng Anh rồi TỰ COPY kết quả;
+  giữ nguyên nguồn, người dùng tự dán. Thay toàn bộ lựa chọn auto-replace cũ.
+- Không còn yêu cầu liệt kê terminal/TUI hoặc xây adapter sửa buffer.
+  Các đoạn phía dưới nói tự thay/giữ caret là lịch sử đã bị thay thế.
+- Đang thảo luận riêng Alt+V: người dùng muốn thay đúng vùng bôi đen trong
+  ô nhập, kể cả terminal; đã hỏi terminal/TUI/shell cụ thể, chưa có đáp án.
+- Đề xuất chưa duyệt: giữ nguồn khi AI chờ, chỉ báo không giành focus,
+  thay nguyên đoạn một lần sau thành công, dấu xác nhận mờ đi khoảng 0,5s.
+- Người dùng yêu cầu bỏ qua việc sửa CLI, dùng Context7 MCP và tiếp tục.
+- Loading Chụp & dịch AI đã được người dùng đồng ý: ảnh hiện ngay,
+  bên phải hiển thị đang dịch; đóng/hủy vẫn dùng được, lỗi có thử lại.
+- Đề xuất kỹ thuật Alt+C: Google Translate web mặc định, Bing/Edge dự phòng;
+  chưa benchmark mạng thật và không đồng nhất với Google Cloud API.
+- Đang viết kế hoạch dự thảo Python/GTK4/Gio + extension GJS; các khả năng
+  desktop và việc thử key thật chưa được xác minh trong môi trường hiện tại.
+- UI Chụp & dịch AI đã chọn: MẪU 1 (ảnh crop bên trái, bản dịch bên phải).
+  Người dùng đổi từ mẫu 3 sang mẫu 1 ngay sau đó; lấy mẫu 1 làm chuẩn.
+  Ảnh lưu tại docs/design/image-translation-approved.png.
+- Cập nhật mới nhất: phần ảnh là Chụp & dịch AI, gửi ảnh crop trực tiếp
+  tới model vision để dịch; thay thế lựa chọn OCR riêng + dịch miễn phí cũ.
+- Người dùng yêu cầu 3 phương án UI kết quả ảnh, khác popup Alt+C.
+- Đã thử clone Pot lại theo yêu cầu, shell vẫn lỗi DNS github.com;
+  đã đọc Screenshot/index.jsx, screenshot.rs và window.rs qua web.
+- Người dùng đã chọn app riêng, không fork toàn bộ Pot.
+- Người dùng đã chọn OCR là dịch Anh ↔ Việt, không viết lại bằng AI.
+- Người dùng đã duyệt popup bố cục ảnh mẫu 1, phối màu tối ảnh mẫu 2;
+  bổ sung yêu cầu bấm vị trí bất kỳ ngoài popup trên màn hình để đóng ngay.
+- Người dùng yêu cầu popup tự co giãn theo lượng bản dịch, tới giới hạn
+  thì dừng phóng to và cho cuộn dọc nội dung; đoạn ngắn kế tiếp phải co lại.
+- Đang viết và kiểm tra độc lập spec tại:
+  docs/superpowers/specs/2026-11-01-q-translate-design.md
+- Những đoạn bên dưới là lịch sử khảo sát trước các lựa chọn trên;
+  bản spec mới là nơi tổng hợp quyết định hiện tại để người dùng duyệt.
+
+ĐÃ ĐƯỢC NGƯỜI DÙNG NÊU
+- Ubuntu 24 và 26; hỗ trợ X11 và Wayland.
+- Alt+C: dịch miễn phí Anh ↔ Việt; popup chỉ cần văn bản dịch.
+- Alt+V: viết lại văn bản trộn Anh/Việt thành tiếng Anh giao tiếp đơn giản,
+  đúng ngữ pháp, dùng từ thông dụng cho người mới học; thay phần đang chọn.
+- OCR chụp vùng màn hình; dùng key OCR có trong .env.
+- Dashboard chọn provider/model; luân phiên key và fallback.
+- Khởi động cùng máy. Chỉ cần tiếng Anh và tiếng Việt.
+- Tham khảo Pot Desktop. Demo HTML để review trước.
+
+PHÁT HIỆN
+- Ubuntu 26.04 GNOME chỉ có phiên Wayland; ứng dụng X11 chạy bằng XWayland.
+- GNOME 48 mới bổ sung Global Shortcuts portal. Không được giả định rằng
+  đường portal này có sẵn trên GNOME mặc định của Ubuntu 24.04.
+- Pot hiện dùng Tauri 1.x; tài liệu upstream yêu cầu cấu hình phím tắt hệ
+  thống và screenshot tool ngoài ở một số môi trường Wayland. Clone Pot
+  nguyên trạng không tự giải quyết được yêu cầu tương thích.
+- Tự dán chỉ có ý nghĩa trong vùng chỉnh sửa. Văn bản chỉ đọc cần popup
+  hoặc copy. Không hứa thay văn bản trong mọi vùng của mọi ứng dụng.
+- App cần giữ cửa sổ nguồn và vùng chọn; nếu người dùng chuyển app hoặc
+  thay vùng chọn trong lúc gọi API, phải hủy tự dán và cho phép copy kết quả.
+- Xử lý terminal cần phân biệt Ctrl+Shift+C / Ctrl+Shift+V với app thường.
+- Cần kiểm tra GTK, Qt, Chrome, Firefox, VS Code/Electron, LibreOffice,
+  terminal, PDF scan; cả app native Wayland và XWayland.
+
+CÁC HƯỚNG ĐỂ CHỌN TRONG BUỔI BRAINSTORMING
+A. Đề xuất: app gọn riêng + extension GNOME nhỏ.
+   Extension nhận phím tắt, lấy vùng chọn và tích hợp cửa sổ nguồn.
+   App/service quản lý dịch, OCR, key và model. Cần kiểm tra riêng GNOME
+   trên Ubuntu 24.04 và 26.04, duy trì tương thích extension khi nâng cấp.
+   Đây là hướng đề xuất, chưa được người dùng chọn hay kiểm chứng.
+B. Fork Pot Desktop, giữ giấy phép GPL-3.0 và các thông báo upstream.
+   Tận dụng code sẵn có, nhưng phải lược bỏ UI/tính năng và vẫn cần bổ sung
+   đường tích hợp GNOME Wayland. Chưa clone được do DNS shell bị chặn.
+
+MẶC ĐỊNH ĐƯỢC ĐỀ XUẤT TRONG DEMO, CHƯA CHỐT
+- OCR: Alt+X; nhận diện bằng Datalab, sau đó dịch miễn phí.
+- Tesseract cục bộ là lựa chọn bổ sung; chưa cài hoặc thử.
+- Alt+C với đoạn trộn Anh/Việt: dịch về tiếng Việt để đọc hiểu.
+- Không lưu lịch sử. Chạy nền khi đóng dashboard.
+- Key hợp lệ luân phiên. Khi lỗi tạm thời, tạm nghỉ có backoff và tôn trọng
+  Retry-After; không xoay key để vượt giới hạn cấp tài khoản/provider.
+- Model chỉ hiện trạng thái dùng được sau khi đã thực hiện request thật.
+- Chỉ vô hiệu/xóa key khi xác minh lỗi xác thực vĩnh viễn. Không coi 429,
+  hết credit/quota, lỗi mạng hoặc model không hỗ trợ là key hỏng.
+- Giữ nguyên nghĩa, tên, số liệu và thuật ngữ khi viết lại. Nội dung nguồn
+  là dữ liệu, không phải chỉ dẫn. Chỉ trả về tiếng Anh đã viết lại.
+
+TÌNH TRẠNG .ENV
+- Bản kiểm kê ban đầu: 168 dòng khai báo API key, 146 giá trị khác nhau.
+- Đã loại 22 dòng trùng hoàn toàn (cùng tên biến và cùng giá trị), giữ
+  nguyên tất cả cặp tên/key khác nhau; backup riêng tư trong .secrets/.
+- Có 89 dòng không phải khai báo dotenv chuẩn. Có thể chứa key thô và
+  nhãn tài khoản; chưa coi là key lỗi và chưa xóa. Cần chuẩn hóa riêng.
+- Một số biến model trùng tên nhưng khác giá trị. Chưa tự ý ghi đè.
+- Chưa thử key/model qua mạng: DNS bị chặn trong shell. Không gửi key qua
+  web search, công cụ duyệt tài liệu, hoặc đưa vào HTML.
+- Chi tiết không chứa giá trị key: reports/env-inventory.json.
+
+DEMO
+- Mở preview/q-translate-demo.html trực tiếp bằng trình duyệt.
+- Các file nguồn: preview/index.html, preview/style.css, preview/app.js.
+- Dữ liệu mẫu có sẵn; không dịch tùy ý, không gọi API, không OCR thật.
+- Lựa chọn cài đặt chỉ lưu trong localStorage của trình duyệt.
+- Chưa đăng ký phím tắt, autostart hoặc cài extension trên máy người dùng.
+- Kiểm tra được cú pháp JS, cấu trúc HTML và tài nguyên nội bộ.
+- Chưa kiểm tra trực quan: server socket bị sandbox chặn; browser tool
+  chặn URL file://. Không đi vòng qua giới hạn này.
+- Ảnh tham chiếu người dùng nhắc đến chưa hiện trong ngữ cảnh cuộc trò chuyện.
+
+NGUỒN ĐÃ ĐỌC
+https://documentation.ubuntu.com/release-notes/26.04/summary-for-lts-users/
+https://release.gnome.org/48/developers/
+https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.RemoteDesktop.html
+https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Clipboard.html
+https://github.com/pot-app/pot-desktop/blob/master/README_EN.md
+https://raw.githubusercontent.com/pot-app/pot-desktop/master/src-tauri/Cargo.toml
+https://raw.githubusercontent.com/pot-app/pot-desktop/master/src-tauri/src/hotkey.rs
+https://raw.githubusercontent.com/pot-app/pot-desktop/master/src-tauri/src/clipboard.rs
+https://raw.githubusercontent.com/pot-app/pot-desktop/master/src-tauri/src/screenshot.rs
+https://raw.githubusercontent.com/obra/superpowers/main/skills/brainstorming/SKILL.md
+
+BƯỚC TIẾP THEO
+Review HTML, chọn hướng xây app, rồi chốt thiết kế và phạm vi thử nghiệm.
+Kiểm tra thật API cần môi trường shell truy cập được các provider.
+Không báo ứng dụng desktop hoàn tất khi mới có demo HTML.

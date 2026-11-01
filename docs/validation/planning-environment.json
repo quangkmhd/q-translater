@@ -1,0 +1,27 @@
+{
+  "observed_at": "2026-11-01",
+  "phase": "planning_preflight_only",
+  "os": {
+    "name": "Ubuntu 26.04.1 LTS",
+    "version_id": "26.04"
+  },
+  "system_python": "Python 3.14.4",
+  "gnome_shell": "GNOME Shell 50.1",
+  "system_gtk": "4.22",
+  "default_python_has_gi": false,
+  "desktop_session_variables": {
+    "DISPLAY": false,
+    "WAYLAND_DISPLAY": false,
+    "XDG_SESSION_TYPE": false,
+    "DBUS_SESSION_BUS_ADDRESS": false
+  },
+  "usable_project_git_repository": false,
+  "baseline_tests": {
+    "command": "python3 -m unittest discover -s tests",
+    "passed": 27,
+    "failed": 0
+  },
+  "native_desktop_status": "not_tested_no_session_environment",
+  "native_application_written": false,
+  "no_extension_installation_performed": true
+}

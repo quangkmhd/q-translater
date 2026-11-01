@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.qtranslate.App
+Exec=/usr/bin/qtranslate serve

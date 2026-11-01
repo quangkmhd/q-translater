@@ -1,0 +1,26 @@
+{
+  "session": "Ubuntu GNOME 50.1 / Wayland, active user seat0",
+  "user_install": "~/.local/bin/qtranslate",
+  "backend_started": true,
+  "dashboard_started": true,
+  "credentials_imported": 101,
+  "vision_pairs": 2,
+  "extension_discovery": "pending current session",
+  "enabled_extensions_before": [
+    "ubuntu-appindicators@ubuntu.com",
+    "ubuntu-dock@ubuntu.com",
+    "ding@rastersoft.com",
+    "all-in-one-clipboard@NiffirgkcaJ.github.com",
+    "CoverflowAltTab@palatis.blogspot.com",
+    "Vitals@CoreCoding.com"
+  ],
+  "extension_enabled_for_next_session": true,
+  "autostart_exists": true,
+  "backend_status": {
+    "backend": true,
+    "bridge_owner": false,
+    "bridge_ready": false
+  },
+  "gnome_reload_requirement": "First local extension install needs logout/login on Wayland; no supported live discovery API.",
+  "computer_use_status": "Orca provider chooses venv Python without GI; system Python AT-SPI used only to verify own app window."
+}

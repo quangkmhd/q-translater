@@ -1,0 +1,1 @@
+export function textFrames(text,limit=65536){const encoder=new TextEncoder();const frames=[];let part='',bytes=0;for(const char of text){const size=encoder.encode(char).length;if(part&&bytes+size>limit){frames.push(part);part='';bytes=0;}part+=char;bytes+=size;}if(part||!frames.length)frames.push(part);return frames;}

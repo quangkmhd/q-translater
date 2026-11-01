@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Q Translate · Cài đặt</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="#services"><strong>Q</strong><span>Q Translate<small>Cài đặt của bạn</small></span></a>
+    <nav aria-label="Cài đặt">
+      <button class="nav active" data-page="services"><img src="assets/icons/network-server.svg" alt="">Dịch vụ & model</button>
+      <button class="nav" data-page="keys"><img src="assets/icons/dialog-password.svg" alt="">API key<span class="nav-count">5</span></button>
+      <button class="nav" data-page="appearance"><img src="assets/icons/document-properties.svg" alt="">Giao diện & phím tắt</button>
+      <button class="nav" data-page="prompts"><img src="assets/icons/accessories-text-editor.svg" alt="">Prompt</button>
+      <button class="nav" data-page="logs"><img src="assets/icons/view-list.svg" alt="">Nhật ký</button>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span><span>Bản xem trước<small>Chưa kết nối API hoặc desktop</small></span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span>Cài đặt <span class="slash">/</span> <span id="breadcrumb">Dịch vụ & model</span></span><span class="preview-label">DEMO HTML</span></header>
+    <main>
+      <section class="page active" id="services" aria-labelledby="services-title">
+        <div class="page-heading"><div><h1 id="services-title">Dịch vụ & model</h1><p>Chọn dịch vụ và thứ tự dự phòng cho từng thao tác.</p></div><button class="button" data-go="appearance"><img src="assets/icons/media-playback-start.svg" alt="">Thử giao diện</button></div>
+        <div class="mode-tabs" role="tablist" aria-label="Thao tác">
+          <button class="mode" id="tab-free" role="tab" aria-selected="false" aria-controls="provider-panel" data-mode="free"><span>Dịch nhanh<small>Anh ↔ Việt · miễn phí</small></span><kbd>Alt C</kbd></button>
+          <button class="mode active" id="tab-text" role="tab" aria-selected="true" aria-controls="provider-panel" data-mode="text"><span>Viết lại tiếng Anh<small>AI · tự copy kết quả</small></span><kbd>Alt V</kbd></button>
+          <button class="mode" id="tab-vision" role="tab" aria-selected="false" aria-controls="provider-panel" data-mode="vision"><span>Chụp & dịch AI<small>Gửi ảnh trực tiếp tới AI</small></span><kbd>Alt X</kbd></button>
+        </div>
+        <div class="panel" id="provider-panel" role="tabpanel" aria-labelledby="tab-text">
+          <div class="panel-heading"><div><h2>Thứ tự provider</h2><p>Dùng mũi tên để đổi ưu tiên.</p></div><span class="muted" id="provider-count">5 provider</span></div>
+          <div class="provider-table" role="table" aria-label="Thứ tự provider">
+            <div class="table-head" role="row"><span>Ưu tiên</span><span>Provider</span><span>Model</span><span>API key</span><span>Bật</span><span></span></div>
+            <div id="provider-rows" role="rowgroup"></div>
+          </div>
+          <div class="panel-note"><img src="assets/icons/help-about.svg" alt=""><span id="verification-note">Tên model và số key lấy từ kiểm kê offline. Chưa có key/model nào được xác minh qua API.</span></div>
+        </div>
+        <div class="bottom-grid">
+          <div class="panel routing-panel"><div class="panel-heading"><div><h2>Fallback tự động</h2><p id="routing-description">Thử key trước, rồi mới chuyển provider.</p></div><button class="switch on" role="switch" aria-checked="true" aria-label="Fallback tự động" disabled><span></span></button></div><div class="route" id="routing-path"><span>Key hiện tại</span><b>→</b><span>Key kế tiếp</span><b>→</b><span>Provider kế tiếp</span></div><div class="routing-foot"><span id="routing-footnote">Luân phiên key hợp lệ</span><span>Tổng thời gian <strong>30 giây</strong></span></div></div>
+          <div class="panel compact-panel"><h2>Đầu ra</h2><label class="field-label" for="output-language" id="output-label">Ngôn ngữ kết quả</label><select id="output-language" disabled><option>Tiếng Anh giao tiếp · A1–A2</option></select><p id="output-description">Giữ ý, dùng từ phổ biến. Tự copy khi hoàn tất.</p></div>
+        </div>
+      </section>
+
+      <section class="page" id="keys" aria-labelledby="keys-title" hidden>
+        <div class="page-heading"><div><h1 id="keys-title">API key</h1><p>Quản lý riêng từng provider. Key luôn được che.</p></div><button class="button" id="import-open"><img src="assets/icons/document-save.svg" alt="">Nhập .env / TXT</button></div>
+        <div class="notice">Số lượng và model cập nhật từ audit API thật. Các dòng key bên dưới dùng ID minh họa; HTML không chứa API key thật.</div>
+        <div class="panel"><div class="panel-heading"><h2>Kho key theo provider</h2><span class="muted">Đã có request thành công</span></div><div id="key-summary"></div></div>
+        <div class="panel key-detail"><div class="panel-heading"><div><h2 id="key-detail-title">Google AI</h2><p>Các dòng minh họa cho cách hiển thị.</p></div><button class="button" id="audit-demo"><img src="assets/icons/view-refresh.svg" alt="">Xem trạng thái kiểm tra</button></div><div id="key-detail-rows"></div><div class="panel-note">Key sai xác thực mới bị loại bỏ sau xác minh. Hết quota hoặc lỗi mạng được giữ lại.</div></div>
+      </section>
+
+      <section class="page" id="appearance" aria-labelledby="appearance-title" hidden>
+        <div class="page-heading"><div><h1 id="appearance-title">Giao diện & phím tắt</h1><p>Các thao tác nhỏ, ngay trong ứng dụng bạn đang dùng.</p></div></div>
+        <div class="settings-grid"><div class="panel">
+          <div class="panel-heading"><h2>Phím tắt</h2></div>
+          <div class="setting-row"><div><h3>Dịch nhanh</h3><p>Miễn phí · Anh ↔ Việt</p></div><input class="shortcut-input" data-setting="shortcutC" value="Alt+C" aria-label="Phím dịch nhanh"></div>
+          <div class="setting-row"><div><h3>Viết lại & copy</h3><p>Tiếng Anh giao tiếp</p></div><input class="shortcut-input" data-setting="shortcutV" value="Alt+V" aria-label="Phím viết lại"></div>
+          <div class="setting-row"><div><h3>Chụp & dịch AI</h3><p>Ảnh → bản dịch Anh ↔ Việt</p></div><input class="shortcut-input" data-setting="shortcutX" value="Alt+X" aria-label="Phím chụp và dịch"></div>
+        </div><div class="panel"><div class="panel-heading"><h2>Hành vi</h2></div>
+          <div class="setting-row"><div><h3>Khởi động cùng máy</h3><p>Chạy nền khi đăng nhập</p></div><button class="switch on" role="switch" aria-checked="true" aria-label="Khởi động cùng máy" data-toggle="autostart"><span></span></button></div>
+          <div class="setting-row"><div><h3>Timeout toàn bộ tác vụ</h3><p>Bao gồm các lần fallback</p></div><span class="value">30 giây</span></div>
+          <div class="setting-row"><div><h3>Timeout mỗi key AI</h3><p>Thời gian để nhận đủ output, gồm streaming</p></div><span class="value">5 giây</span></div>
+          <div class="setting-row"><div><h3>Streaming Alt+V</h3><p>Hiện chữ dần · chỉ copy khi hoàn tất</p></div><span class="value">Bật</span></div>
+          <div class="setting-row"><div><h3>Thinking</h3><p>Chỉ dùng model hỗ trợ tắt reasoning</p></div><span class="value">Tắt</span></div>
+          <div class="setting-row"><div><h3>Độ dài văn bản</h3><p>Không đặt giới hạn ký tự trong app</p></div><span class="value">Không giới hạn</span></div>
+        </div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>Xem trước khung Alt+V</h2><p>Không gọi AI. Bấm các nút bên dưới để xem từng trạng thái.</p></div><label class="font-control">Cỡ chữ <select id="font-size"><option>16</option><option selected>18</option><option>20</option><option>22</option></select></label></div>
+          <div class="demo-toolbar"><button class="button primary" id="demo-loading">Đang xử lý</button><button class="button" id="demo-short">Kết quả ngắn</button><button class="button" id="demo-long">Kết quả dài</button><button class="button" id="demo-error">Có lỗi</button></div>
+          <div class="setting-row"><div><h3>Khung kết quả</h3><p>Góc màn hình đang dùng · tự nới rồi cuộn · có nút copy lại</p></div><span class="value">Tự tắt sau 30 giây</span></div>
+          <div class="setting-row"><div><h3>Giữ khung khi bấm ngoài</h3><p>Alt+V mới chuyển khung sang trạng thái tải mới</p></div><span class="value">Luôn bật</span></div>
+        </div>
+      </section>
+
+      <section class="page" id="prompts" aria-labelledby="prompts-title" hidden>
+        <div class="page-heading"><div><h1 id="prompts-title">Prompt</h1><p>Chỉ dẫn riêng cho viết lại văn bản và dịch ảnh.</p></div><button class="button" id="reset-prompt"><img src="assets/icons/view-refresh.svg" alt="">Khôi phục mặc định</button></div>
+        <div class="segmented" role="group" aria-label="Prompt"><button class="active" data-prompt="text">Alt+V · Viết lại</button><button data-prompt="vision">Alt+X · Dịch ảnh</button></div>
+        <div class="panel"><div class="panel-heading"><h2 id="prompt-title">Tiếng Anh giao tiếp đơn giản</h2><span class="muted">Tự lưu trong demo</span></div><label class="sr-only" for="prompt-editor">Nội dung prompt</label><textarea id="prompt-editor" spellcheck="false"></textarea><div class="panel-note" id="prompt-caption">Đầu vào có thể trộn Anh/Việt. Chỉ trả về bản tiếng Anh, giữ đúng ý.</div></div>
+      </section>
+
+      <section class="page" id="logs" aria-labelledby="logs-title" hidden>
+        <div class="page-heading"><div><h1 id="logs-title">Nhật ký</h1><p>Input, output và lỗi trong chu kỳ 24 giờ hiện tại.</p></div><button class="button" id="clear-logs"><img src="assets/icons/edit-clear.svg" alt="">Xóa log mẫu</button></div>
+        <div class="panel"><div class="setting-row"><div><h3>Tự động dọn log</h3><p>Xóa nội dung log mỗi 24 giờ. API key luôn được che.</p></div><span class="value lavender">Đang bật</span></div><div class="setting-row"><div><h3>File log của bản cài</h3><p><code>~/.local/state/q-translate/q-translate.log</code></p></div><span class="value">Input · Output · Lỗi</span></div></div>
+        <div class="log-tools"><div class="segmented" role="group" aria-label="Lọc nhật ký"><button class="active" data-log-filter="all">Tất cả</button><button data-log-filter="error">Có lỗi</button></div><span class="muted">Dữ liệu minh họa · không phải log hệ thống</span></div>
+        <div class="panel" id="log-list"></div>
+      </section>
+    </main>
+    <footer><span id="save-status" role="status">Các thay đổi chỉ lưu trong trình duyệt này</span><span>Ubuntu 24.04 / 26.04</span></footer>
+  </div>
+</div>
+
+<aside class="rewrite-toast" id="rewrite-toast" aria-label="Kết quả Alt+V" hidden>
+  <div class="rewrite-tools"><button class="icon-button" id="recopy" aria-label="Copy lại kết quả" title="Copy lại" hidden><img src="assets/icons/edit-copy.svg" alt=""></button><button class="icon-button" id="dismiss-rewrite" aria-label="Đóng khung"><img src="assets/icons/window-close.svg" alt=""></button></div>
+  <div class="rewrite-body"><div id="rewrite-indicator"></div><div id="rewrite-content" role="status"></div></div>
+</aside>
+<div class="feedback" id="feedback" role="status" hidden></div>
+<dialog id="import-dialog"><form method="dialog"><div class="dialog-heading"><h2>Nhập API key</h2><button class="icon-button" aria-label="Đóng"><img src="assets/icons/window-close.svg" alt=""></button></div><p>Bản cài sẽ đọc .env hoặc TXT trên máy, gộp với bộ hiện có và bỏ trùng theo provider/key/account. Giá trị key luôn được che. Demo này không đọc hoặc lưu secret.</p><label for="import-path">File nguồn</label><input id="import-path" value="/home/quangnhvn34/dev/me/Q-translate/.env" readonly><div class="dialog-actions"><button class="button primary">Đã hiểu</button></div></form></dialog>
+<script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "platform": "unknown",
+  "shell_version": "",
+  "selection": false,
+  "clipboard": false,
+  "capture": false,
+  "popup": false,
+  "popup_backend": "unverified",
+  "status": "BLOCKED",
+  "reason": "NO_DESKTOP_SESSION"
+}

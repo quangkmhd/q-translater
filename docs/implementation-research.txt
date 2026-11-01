@@ -1,0 +1,169 @@
+Q TRANSLATE — TÀI LIỆU VÀ HƯỚNG TRIỂN KHAI
+Ngày tra cứu: 2026-11-01
+
+Phạm vi: tìm tài liệu chính thức, đọc Pot đã clone và đối chiếu source GNOME
+46.0/50.0. Đây là nghiên cứu và ứng viên cho spike; chưa chạy extension hoặc
+nghiệm thu desktop. Không gọi thêm API bằng key thật trong lượt nghiên cứu.
+Chi tiết kiểm chứng source: reports/implementation-research.json.
+
+1. NỀN TẢNG MỤC TIÊU
+Ubuntu 24.04 dùng baseline GNOME 46. Ubuntu 26.04 dùng GNOME 50, phiên GNOME
+Wayland; app X11 vẫn có thể qua XWayland. Ma trận cũ của spec được giữ:
+24.04 Xorg, 24.04 Wayland, 26.04 Wayland; kiểm tra app native và XWayland.
+Nguồn:
+https://documentation.ubuntu.com/release-notes/24.04/
+https://documentation.ubuntu.com/release-notes/26.04/changes-since-previous-interim/
+https://documentation.ubuntu.com/release-notes/26.04/summary-for-lts-users/
+
+2. PHÍM TẮT TOÀN CỤC
+Ứng viên baseline: extension GJS, GSettings chứa Alt+C/Alt+V/Alt+X;
+Main.wm.addKeybinding khi enable và removeKeybinding khi disable. Chỉ bật ở
+session mode cần thiết, không trên màn hình khóa. Mã hai tag có cùng giao
+diện đăng ký này. Phải xử lý đăng ký thất bại/xung đột và tháo signal/timer.
+Global Shortcuts portal có từ GNOME 48, nên không dùng nó làm đường duy nhất
+cho Ubuntu 24.04 mặc định.
+Nguồn:
+https://raw.githubusercontent.com/GNOME/gnome-shell/46.0/js/ui/windowManager.js
+https://raw.githubusercontent.com/GNOME/gnome-shell/50.0/js/ui/windowManager.js
+https://release.gnome.org/48/developers/
+https://gjs.guide/extensions/development/creating.html
+
+3. LẤY VÙNG CHỌN VÀ GHI KẾT QUẢ
+Ứng viên: St.Clipboard.get_default(), đọc PRIMARY bằng get_text; Alt+V hoàn
+tất thì set_text vào CLIPBOARD. Đã thấy các API và mapping sang MetaSelection
+ở cả hai tag. Đây là API của tiến trình Shell/extension, không phải thư viện
+mà app Python thông thường có thể gọi để có quyền compositor.
+PRIMARY chỉ hữu ích khi app nguồn quảng bá vùng chọn. Callback phải gắn
+request generation/cửa sổ nguồn; không dùng clipboard hoặc selection cũ
+như thể đó là vùng đang bôi. Khả năng xác minh PRIMARY thuộc đúng nguồn,
+đọc terminal và các app không cung cấp PRIMARY vẫn phải thử thực tế.
+Không phát Ctrl+C đại trà. Clipboard portal chỉ bổ sung clipboard cho một
+session portal tương thích; không phải quyền đọc clipboard toàn cục độc lập.
+Nguồn:
+https://raw.githubusercontent.com/GNOME/gnome-shell/46.0/src/st/st-clipboard.c
+https://raw.githubusercontent.com/GNOME/gnome-shell/50.0/src/st/st-clipboard.c
+https://gnome.pages.gitlab.gnome.org/gnome-shell/st/class.Clipboard.html
+https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Clipboard.html
+
+4. POPUP ĐÚNG VỊ TRÍ, BẤM NGOÀI ĐÓNG
+Gdk.Popup được neo tương đối với surface cha của nó. Không suy từ API này
+rằng GtkPopover có thể neo trực tiếp vào vùng chọn trong ứng dụng khác.
+Ưu tiên spike so sánh: popup St/Clutter trong Shell với dashboard GTK4;
+hoặc cửa sổ GTK được desktop bridge hỗ trợ nếu kiểm chứng được hành vi.
+Đây là đề xuất kỹ thuật, chưa thay quyết định kiến trúc bằng kết quả giả.
+Đã đọc BoxPointer/GrabHelper ở hai tag. GNOME 46 GrabHelper xử lý click ngoài
+bằng EVENT_STOP; dùng nguyên helper không chứng minh được click đó tới app
+bên dưới. Cần kiểm tra riêng click-through đúng một lần, focus, chọn chữ,
+cuộn và copy. Khung Alt+V không được lấy modal grab làm ngừng gõ ở app nguồn.
+Không có bằng chứng API chung lấy hình chữ nhật selection từ mọi app;
+giữ fallback vị trí ổn định trên màn hình nguồn như spec đã cho phép.
+Nguồn:
+https://docs.gtk.org/gdk4/iface.Popup.html
+https://docs.gtk.org/gdk4/struct.PopupLayout.html
+https://gjs.guide/extensions/topics/st-widgets.html
+https://raw.githubusercontent.com/GNOME/gnome-shell/46.0/js/ui/grabHelper.js
+https://raw.githubusercontent.com/GNOME/gnome-shell/50.0/js/ui/grabHelper.js
+
+5. CHỤP VÙNG RIÊNG TƯ
+Ứng viên trong extension: lớp chọn vùng và Shell.Screenshot.screenshot_area
+với Gio output stream. Header của cả hai tag có hàm chụp vùng nhận output
+stream; thử stream bộ nhớ trước, file tạm riêng tư khi giao thức cần.
+Phải kiểm tra logical/physical pixel, fractional scaling, hai màn hình và
+đóng lớp chọn trước khi capture để không chụp cả overlay.
+Không gọi nguyên luồng lưu screenshot mặc định: helper _storeScreenshot
+trong source GNOME ghi ảnh vào clipboard và lưu file, trái yêu cầu chỉ
+Alt+V tự copy và không lưu kho ảnh. Chỉ gửi crop cho AI, không gửi full-screen.
+Screenshot portal là phương án thay thế cần kiểm tra UX/quyền và introspect
+version. Tùy chọn target/AvailableTargets trong tài liệu hiện tại thuộc v3;
+không mặc định chúng có trên Ubuntu 24.04. interactive có từ interface v2.
+Nguồn:
+https://raw.githubusercontent.com/GNOME/gnome-shell/46.0/src/shell-screenshot.h
+https://raw.githubusercontent.com/GNOME/gnome-shell/50.0/src/shell-screenshot.h
+https://raw.githubusercontent.com/GNOME/gnome-shell/46.0/js/ui/screenshot.js
+https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.Screenshot.html
+
+6. ALT+C DỊCH MIỄN PHÍ
+Pot có adapter Google web dùng translate_a/single và ghép các mảnh trả về.
+Q Translate chỉ lấy bản dịch, không đưa nhánh từ điển/phát âm vào popup.
+Adapter Bing/Edge lấy token ngắn hạn rồi gọi endpoint dịch; cần cache theo
+thời hạn và chuẩn hóa lỗi. Không đưa token vào log hoặc URL báo cáo.
+Các đường web này là nguồn tham khảo, không phải bằng chứng API miễn phí
+chính thức hoặc endpoint vẫn dùng được hôm nay. Vẫn cần smoke test Anh–Việt,
+đo latency/lỗi rồi giữ Google trước/Bing dự phòng nếu kết quả phù hợp.
+Pot đang được GitHub ghi archived; mã clone là snapshot tham khảo, không
+coi cơ chế Wayland/endpoint cũ của Pot là cam kết cho Q Translate.
+Nguồn, commit đã clone 594d32ede96acd106b0256deaa8bb440ffcdff40:
+https://github.com/pot-app/pot-desktop/blob/594d32ede96acd106b0256deaa8bb440ffcdff40/src/services/translate/google/index.jsx
+https://github.com/pot-app/pot-desktop/blob/594d32ede96acd106b0256deaa8bb440ffcdff40/src/services/translate/bing/index.jsx
+https://github.com/pot-app/pot-desktop/blob/594d32ede96acd106b0256deaa8bb440ffcdff40/README_EN.md#wayland-support
+
+7. STREAMING VÀ DEADLINE
+Cloudflare hỗ trợ stream SSE; Ollama native dùng NDJSON. Parser phải theo
+đúng provider, không coi role/comment/metadata là chữ đầu. Benchmark streaming
+đã có ở reports/stream-benchmark.json; đây không phải bản tích hợp vào app.
+Mạng không chạy trong GNOME Shell hoặc GTK main loop. Worker phát update
+kèm generation; GTK nhận qua GLib main loop, Shell UI nhận qua IPC async.
+Chỉ output hoàn chỉnh hợp lệ mới được tự copy, bật dấu tích và đếm 30s ẩn.
+Deadline đã chốt: attempt_deadline = min(attempt_start + 5s, task_deadline),
+task_deadline = task_start + 30s. Dùng đồng hồ monotonic. Socket timeout là
+ngưỡng của thao tác I/O chặn, không đủ chứng minh giới hạn toàn bộ stream.
+Controller cần watchdog/deadline tuyệt đối, vô hiệu output đến trễ và hủy/
+đóng transport khi hỗ trợ; không tạo worker vô hạn nếu I/O chưa thoát.
+Giữ fallback key trước/provider sau, cooldown và last-success như spec;
+không mở rộng thiết kế riêng cho lỗi giữa stream theo quyết định người dùng.
+Nguồn:
+https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/
+https://docs.ollama.com/api/streaming
+https://pygobject.gnome.org/guide/threading.html
+https://docs.python.org/3.12/library/time.html#time.monotonic
+https://docs.python.org/3.12/library/socket.html#socket.socket.settimeout
+
+8. ẢNH GỬI THẲNG TỚI AI
+Gemma 4 26B Cloudflare được catalog ghi có Vision; Gemini có tài liệu image
+input. Đây là hai hướng thử đầu tiên với key hiện có, chưa phải pool vision
+đã xác minh. Phải kiểm tra payload ảnh/provider, thinking off, dịch đúng
+Anh–Việt/hỗn hợp, và output hoàn tất trong ngân sách 5s/key. Chỉ dùng ảnh mẫu
+công khai/tự tạo để probe; không dùng ảnh màn hình riêng của người dùng.
+Không suy Llama 70B hoặc một key đã chạy text là đã chạy ảnh. Chưa cần OCR
+riêng: crop + prompt dịch ảnh -> kết quả dịch. Lưu thứ tự vision riêng sau
+probe thật; không đổi pool text đã được người dùng chốt.
+Nguồn:
+https://developers.cloudflare.com/workers-ai/models/gemma-4-26b-a4b-it/
+https://ai.google.dev/gemini-api/docs/image-understanding
+
+9. AUTOSTART VÀ ĐÓNG GÓI
+Autostart theo XDG: file desktop trong ~/.config/autostart, chạy sau login;
+đóng dashboard vẫn giữ service, lệnh Thoát mới dừng app. Cần single instance.
+GTK4/PyGObject có gói hệ thống Ubuntu; ưu tiên chúng để tránh ABI extension
+Python/GI lệch giữa hai hệ điều hành. Đóng gói .deb với dependency rõ, launcher,
+schema và extension phù hợp; không kèm secret/source .env trong package.
+Import native sau này gộp/bỏ trùng theo provider/key/account, giữ cặp account
+và hợp nhất model/capability, lưu atomic/backup. Chính sách đã chốt này không
+có nghĩa CLI import hiện tại đã là dashboard import hoàn chỉnh.
+Nguồn:
+https://specifications.freedesktop.org/autostart/latest/
+https://pygobject.gnome.org/getting_started.html
+https://www.debian.org/doc/manuals/debmake-doc/
+
+10. THỨ TỰ KIỂM CHỨNG
+A. Phím tắt -> selection đúng -> ghi clipboard -> hủy/generation.
+B. Popup không giành focus, bấm ngoài đóng mà click tới app đúng một lần.
+C. Capture đúng crop, không ghi ảnh clipboard/kho ảnh, đúng HiDPI.
+D. Google/Bing smoke test; vision probe độc lập với text đã đo.
+E. Nối streaming, timeout 5s/key + tổng 30s, rồi UI native và .deb.
+Có thể thử Shell lồng để phát triển: GNOME <=48 dùng --nested --wayland,
+GNOME >=49 dùng --devkit --wayland dưới dbus-run-session. Chỉ ghi hướng dẫn,
+chưa khởi chạy. Shell lồng không phải môi trường cách ly hoàn toàn và không
+thay bằng chứng nghiệm thu ba phiên desktop mục tiêu.
+Nguồn:
+https://gjs.guide/extensions/development/debugging.html
+https://gjs.guide/extensions/upgrading/gnome-shell-46.html
+https://gjs.guide/extensions/upgrading/gnome-shell-50.html
+
+GHI CHÚ VỀ NGUỒN
+Đã dùng ctx7 CLI ba lệnh: resolve GNOME Shell, lấy docs tổng quát, truy vấn
+PRIMARY. Truy vấn chuyên biệt không có kết quả; đã dùng API chính thức và
+14 file upstream gắn tag thay vì suy API từ trí nhớ. Tài liệu online hiện
+có trang API GNOME 52; không dùng phiên bản đó làm bằng chứng cho 46/50.
+Source đã tải dưới reference/gnome-api-research, có manifest SHA-256.
+Chỉ tham khảo mã; nếu tái sử dụng phần mã phải giữ license/attribution phù hợp.

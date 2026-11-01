@@ -1,0 +1,8 @@
+.qtranslate-popup {background-color:#252833;color:#eeedf2;border:1px solid #484958;border-radius:10px;padding:14px;spacing:10px;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.qtranslate-tools {spacing:8px;}
+.qtranslate-tool {color:#a999ef;padding:3px 6px;border-radius:5px;}
+.qtranslate-tool:hover {background-color:#363a48;}
+.qtranslate-text {color:#eeedf2;font-size:18px;}
+.qtranslate-status {color:#a999ef;font-size:12px;}
+.qtranslate-capture {background-color:rgba(0,0,0,0.18);}
+.qtranslate-rectangle {border:2px solid #a999ef;background-color:rgba(169,153,239,0.12);}

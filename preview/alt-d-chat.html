@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Q Translate · Alt+D</title>
+  <link rel="stylesheet" href="alt-d-chat.css">
+</head>
+<body>
+  <header class="preview-header"><span>Q Translate <span class="divider">/</span> Trợ lý AI</span><span class="preview-badge">DEMO GIAO DIỆN · PHẢN HỒI MẪU</span></header>
+  <main>
+    <section class="preview-intro" aria-label="Điều khiển bản thử">
+      <span class="eyebrow">THÊM MỘT CÁCH ĐỂ HỎI</span>
+      <h1>Hỏi nhanh.<br>Làm tiếp.</h1>
+      <p>Một hộp chat nhỏ, ngay khi cần.</p>
+      <button class="launch" id="open-chat">Mở trợ lý <kbd>Alt D</kbd></button>
+      <div class="state-controls" aria-label="Xem các trạng thái">
+        <button data-state="empty" class="selected">Ô nhập</button>
+        <button data-state="loading">Đang trả lời</button>
+        <button data-state="result">Có kết quả</button>
+      </div>
+      <p class="browser-note">Nếu trình duyệt giữ Alt+D để mở thanh địa chỉ,<br>bấm “Mở trợ lý” để thử.</p>
+      <details class="prompt-details"><summary>Prompt đề xuất</summary><p id="system-prompt"></p></details>
+    </section>
+
+    <section class="chat-window" id="chat" role="dialog" aria-labelledby="chat-title" aria-describedby="chat-shortcuts">
+      <header class="chat-header">
+        <div class="chat-heading"><img src="assets/icons/help-about.svg" alt=""><h2 id="chat-title">Trợ lý AI</h2><kbd>Alt D</kbd></div>
+        <div class="window-actions"><button class="icon-button" id="new-chat" title="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới"><img src="assets/icons/edit-clear.svg" alt=""></button><button class="icon-button" id="close-chat" title="Đóng · Esc" aria-label="Đóng hộp chat"><img src="assets/icons/window-close.svg" alt=""></button></div>
+      </header>
+      <div class="conversation" id="conversation" role="log" aria-label="Cuộc trò chuyện" aria-live="off">
+        <div class="empty-state" id="empty-state"><p>Bạn cần mình giúp gì?</p><span>Dịch, giải thích, viết lại hoặc kiểm tra ngữ pháp.</span><div class="suggestions"><button data-sample="grammar">Sửa ngữ pháp</button><button data-sample="explain">Giải thích dễ hiểu</button><button data-sample="translate">Dịch một câu</button></div></div>
+      </div>
+      <form id="chat-form" class="composer">
+        <label for="message" class="sr-only">Nhập câu hỏi cho trợ lý AI</label>
+        <textarea id="message" rows="2" placeholder="Hỏi mình bất cứ điều gì…" autocomplete="off" spellcheck="false"></textarea>
+        <div class="composer-bottom"><span id="chat-shortcuts"><kbd>Enter</kbd> gửi <span>·</span> <kbd>Shift Enter</kbd> xuống dòng</span><button type="submit" id="send" class="send-button" title="Gửi" aria-label="Gửi câu hỏi" disabled><img src="assets/icons/go-up.svg" alt=""></button><button type="button" id="stop" class="stop-button" hidden>Dừng</button></div>
+      </form>
+      <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer class="preview-footer"><span>Đề xuất: giữ cuộc trò chuyện khi bấm ra ngoài · đóng bằng Esc hoặc ×</span><span>Không gọi API · không lưu nội dung</span></footer>
+  <script src="alt-d-chat.js"></script>
+</body>
+</html>

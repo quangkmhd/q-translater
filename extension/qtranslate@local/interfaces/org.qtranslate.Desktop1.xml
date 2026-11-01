@@ -1,0 +1,4 @@
+<node><interface name="org.qtranslate.Desktop1">
+<method name="CopyText"><arg type="s" direction="in" name="id"/><arg type="s" direction="in" name="text"/><arg type="b" direction="out" name="ok"/></method>
+<method name="Capabilities"><arg type="s" direction="out" name="json"/></method>
+</interface></node>

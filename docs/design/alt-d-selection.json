@@ -1,0 +1,11 @@
+{
+  "feature": "Alt+D conversational AI popup",
+  "selected_displayed_option": 1,
+  "selected_image": "/home/quangnhvn34/.codex/generated_images/01a1949a-40df-7d02-bf08-18866de2a321/exec-83d59f7a-a292-4737-ab69-b3d59247c856.png",
+  "assistant_title": "Q-translate",
+  "layout": "compact floating chat",
+  "user_choice": "Keep displayed option 1 and name the assistant Q-translate",
+  "native_alt_d_implemented": true,
+  "revised_image": "/home/quangnhvn34/.codex/generated_images/01a1949a-40df-7d02-bf08-18866de2a321/exec-36f86a01-00c5-4b26-a61b-ca74faaddf79.png",
+  "native_result": "docs/design/alt-d-native-result.png"
+}

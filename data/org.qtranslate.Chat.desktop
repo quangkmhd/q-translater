@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Q-translate · Chat AI
+Comment=Hỏi, dịch và kiểm tra ngữ pháp
+Exec=qtranslate chat
+Icon=preferences-desktop-locale
+Terminal=false
+Categories=Utility;
+StartupWMClass=org.qtranslate.Chat

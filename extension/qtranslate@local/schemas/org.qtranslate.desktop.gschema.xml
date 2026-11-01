@@ -1,0 +1,5 @@
+<schemalist><schema id="org.qtranslate.desktop" path="/org/qtranslate/desktop/">
+<key name="translate" type="as"><default>['&lt;Alt&gt;c']</default><summary>Translate selection</summary></key>
+<key name="rewrite" type="as"><default>['&lt;Alt&gt;v']</default><summary>Rewrite selection</summary></key>
+<key name="image-translate" type="as"><default>['&lt;Alt&gt;x']</default><summary>Capture and translate</summary></key>
+</schema></schemalist>

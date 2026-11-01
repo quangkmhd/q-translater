@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Q Translate · Bản thử giao diện</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="#playground"><span class="brand-icon">q<span>↗</span></span><span>Q Translate<small>Ít thao tác. Dễ hiểu hơn.</small></span></a>
+    <div class="nav-label">KHÔNG GIAN CỦA BẠN</div>
+    <nav aria-label="Điều hướng">
+      <button class="nav-item active" data-page="playground"><span aria-hidden="true">⌘</span> Trải nghiệm <span class="nav-dot"></span></button>
+      <button class="nav-item" data-page="providers"><span aria-hidden="true">▦</span> Provider & model</button>
+      <button class="nav-item" data-page="ocr"><span aria-hidden="true">⌗</span> Chụp ảnh & OCR</button>
+      <button class="nav-item" data-page="settings"><span aria-hidden="true">⚙</span> Cài đặt chung</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="platform"><span class="platform-mark">◉</span><div>Ubuntu 24.04 / 26.04<small>Mục tiêu: GNOME · X11 / Wayland</small></div></div><div class="demo-label"><span></span> BẢN THỬ GIAO DIỆN <span class="version">v0.1</span></div></div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="breadcrumb">Không gian của bạn <span>/</span> Trải nghiệm</span><button class="icon-button" id="theme" aria-label="Đổi giao diện sáng tối" title="Đổi giao diện sáng tối">◐</button></header>
+    <div class="content">
+      <section id="playground" class="page active" aria-labelledby="playground-title">
+        <div class="eyebrow">DỊCH NHANH, VIẾT TỰ NHIÊN</div>
+        <h1 id="playground-title">Một phím tắt.<br>Mọi thứ dễ hiểu hơn.</h1>
+        <p class="intro">Đọc bằng ngôn ngữ của bạn. Trả lời bằng tiếng Anh đơn giản.</p>
+        <div class="shortcut-cards">
+          <button class="shortcut-card" id="quick-free"><div class="card-top"><span class="tile purple">文</span><span class="tag">MIỄN PHÍ</span></div><h2>Dịch để hiểu</h2><p>Anh ↔ Việt. Một ô kết quả, vừa đủ.</p><div class="card-bottom"><span>Google Translate</span><span class="keys"><kbd>Alt</kbd><span>+</span><kbd>C</kbd></span></div></button>
+          <button class="shortcut-card" id="quick-ai"><div class="card-top"><span class="tile mint">↗</span><span class="tag green">DÙNG MODEL</span></div><h2>Viết để trò chuyện</h2><p>Anh + Việt → tiếng Anh dễ dùng. Tự copy kết quả.</p><div class="card-bottom"><span>Provider do bạn chọn</span><span class="keys"><kbd>Alt</kbd><span>+</span><kbd>V</kbd></span></div></button>
+        </div>
+        <div class="section-heading"><h2>Thử ngay tại đây</h2><span class="muted">Dữ liệu mẫu · không gọi API</span></div>
+        <div class="editor-panel">
+          <div class="editor-toolbar"><label for="sample">VÍ DỤ</label><select id="sample"><option value="mixed">Một chút Anh, một chút Việt</option><option value="vi">Tiếng Việt</option><option value="en">English</option></select><span class="language-pill" id="source-language">VI + EN</span></div>
+          <label class="sr-only" for="editor">Văn bản thử nghiệm</label>
+          <textarea id="editor" spellcheck="false">Hi team, hôm nay mình hơi bận nên không join meeting được. Can we dời sang ngày mai không?</textarea>
+          <div class="editor-footer"><span id="editor-hint">Bôi đen đoạn mẫu hoặc dùng nút bên cạnh để thử.</span><div><button class="button secondary" id="translate-button">Dịch thử <span>Alt C</span></button><button class="button primary" id="rewrite-button">Viết lại & copy <span>Alt V</span></button></div></div>
+        </div>
+        <div class="quiet-note"><span aria-hidden="true">ⓘ</span><p>Ở ứng dụng thật, bạn chỉ cần bôi đen trong app đang dùng. Dashboard này chỉ mở khi cần cài đặt.</p></div>
+        <div class="preview-bottom"><span class="mini-line"></span><p>Không thêm từ điển, phiên âm hay một màn hình đầy nút.<br>Chỉ phần dịch bạn đang cần.</p><button class="text-button" id="preview-popup">Xem ô kết quả <span>↗</span></button></div>
+      </section>
+
+      <section id="providers" class="page" aria-labelledby="providers-title">
+        <div class="eyebrow">THEO CÁCH CỦA BẠN</div><h1 id="providers-title">Provider & model</h1><p class="intro">Chọn dịch vụ cho Alt+V. Alt+C luôn dùng dịch vụ dịch miễn phí.</p>
+        <div class="notice"><span aria-hidden="true">ⓘ</span><p>Tên model lấy từ cấu hình hiện có. <strong>Chưa được xác minh qua API.</strong> Số key hoạt động sẽ chỉ hiện sau khi kiểm tra thật.</p></div>
+        <div class="section-heading"><h2>Viết lại bằng AI</h2><span class="tag">ALT + V</span></div>
+        <div class="settings-card"><div class="setting-row"><div><h3>Tự chuyển khi có lỗi</h3><p>Thử key kế tiếp, rồi chuyển provider. Tạm nghỉ khi hết quota.</p></div><button class="switch on" id="fallback-toggle" role="switch" aria-checked="true" aria-label="Tự chuyển provider"></button></div><div class="setting-row"><div><h3>Cách chọn key</h3><p>Luân phiên trong pool key đủ điều kiện sử dụng.</p></div><select id="rotation" aria-label="Cách chọn key"><option value="round-robin">Luân phiên</option><option value="priority">Theo thứ tự ưu tiên</option></select></div></div>
+        <p class="field-note">Thứ tự bên dưới là thứ tự thử provider. Dùng ↑ ↓ để thay đổi.</p><div id="provider-list"></div>
+        <div class="section-heading"><h2>Dịch miễn phí</h2><span class="tag">ALT + C</span></div>
+        <div class="settings-card"><div class="setting-row"><div><h3>Dịch vụ mặc định</h3><p>Tự nhận diện Anh / Việt và dịch sang ngôn ngữ còn lại.</p></div><select id="free-provider" aria-label="Dịch vụ dịch miễn phí"><option>Google Translate</option>Bing Translator</option></select></div><div class="setting-row"><div><h3>Khi văn bản trộn Anh và Việt</h3><p>Đề xuất dịch về tiếng Việt để đọc hiểu.</p></div><select id="mixed-target" aria-label="Đích dịch văn bản hỗn hợp"><option value="vi">Tiếng Việt</option><option value="en">Tiếng Anh</option></select></div></div>
+        <div class="section-heading"><h2>Hướng dẫn viết lại</h2><span class="muted">Có thể chỉnh sửa</span></div><label class="sr-only" for="prompt">Prompt viết lại tiếng Anh</label><textarea id="prompt" class="prompt-editor" spellcheck="false"></textarea><button class="text-button" id="reset-prompt">Khôi phục prompt đề xuất</button>
+      </section>
+
+      <section id="ocr" class="page" aria-labelledby="ocr-title">
+        <div class="eyebrow">KỂ CẢ CHỮ TRONG ẢNH</div><h1 id="ocr-title">Khoanh vùng. Đọc hiểu.</h1><p class="intro">Chọn một phần màn hình, nhận diện chữ rồi dịch Anh ↔ Việt.</p>
+        <div class="ocr-preview"><div class="scan-icon">⌗</div><h2>Dịch những gì không thể bôi đen</h2><p>Ảnh, PDF dạng scan, video đang tạm dừng.</p><button class="button primary" id="capture-demo">Thử khoanh vùng mẫu <span>Alt X</span></button><small>Bản thử dùng một ảnh mẫu, không chụp màn hình của bạn.</small></div>
+        <div class="settings-card"><div class="setting-row"><div><h3>Phím tắt chụp & dịch</h3><p>Đề xuất riêng cho OCR, có thể đổi sau.</p></div><span class="keys"><kbd>Alt</kbd><span>+</span><kbd>X</kbd></span></div><div class="setting-row"><div><h3>Nhận diện chữ</h3><p>Dùng pool key OCR riêng, không trộn với pool model.</p></div><select id="ocr-provider" aria-label="Provider OCR"><option>Datalab</option>Tesseract · cục bộ (đề xuất)</option></select></div><div class="setting-row"><div><h3>Sau khi nhận diện</h3><p>Hiện ô dịch gọn, giữ nguyên ứng dụng đang mở.</p></div><span class="subtle-pill">Dịch miễn phí · Alt+C</span></div></div>
+        <div class="quiet-note"><span>ⓘ</span><p>Key Datalab trong cấu hình chưa được thử. Tesseract là phương án cục bộ đề xuất, chưa được cài đặt.</p></div>
+      </section>
+
+      <section id="settings" class="page" aria-labelledby="settings-title">
+        <div class="eyebrow">NHỎ GỌN MỖI NGÀY</div><h1 id="settings-title">Cài đặt chung</h1><p class="intro">Thiết lập một lần, gọi lên khi cần.</p>
+        <div class="section-heading"><h2>Ứng dụng</h2></div><div class="settings-card"><div class="setting-row"><div><h3>Mở cùng máy tính</h3><p>Đề xuất khởi động nền khi đăng nhập Ubuntu.</p></div><button class="switch on" id="autostart-toggle" role="switch" aria-checked="true" aria-label="Mở cùng máy tính"></button></div><div class="setting-row"><div><h3>Đóng cài đặt, tiếp tục chạy nền</h3><p>Gọi lại dashboard từ biểu tượng khay hệ thống.</p></div><button class="switch on" id="tray-toggle" role="switch" aria-checked="true" aria-label="Chạy nền"></button></div><div class="setting-row"><div><h3>Lưu lịch sử dịch</h3><p>Mặc định không giữ lại nội dung bạn dịch.</p></div><button class="switch" id="history-toggle" role="switch" aria-checked="false" aria-label="Lưu lịch sử dịch"></button></div></div>
+        <div class="section-heading"><h2>Ô kết quả</h2></div><div class="settings-card"><div class="setting-row"><div><h3>Cỡ chữ</h3><p>Áp dụng ngay cho ô dịch mẫu.</p></div><select id="font-size" aria-label="Cỡ chữ kết quả"><option value="16">Vừa · 16 px</option><option value="18" selected>Dễ đọc · 18 px</option><option value="22">Lớn · 22 px</option></select></div><div class="setting-row"><div><h3>Nhấn Escape để đóng</h3><p>Không thêm từ điển, phiên âm hay các mục mở rộng.</p></div><kbd>Esc</kbd></div><div class="setting-row"><div><h3>Xem trước</h3><p>Một ô văn bản với nút sao chép và đóng.</p></div><div><button class="button secondary" id="settings-popup">Đoạn ngắn</button> <button class="button secondary" id="settings-popup-long">Đoạn dài · thử cuộn</button></div></div></div>
+        <div class="section-heading"><h2>Tương thích Ubuntu</h2><span class="tag">ĐANG NGHIÊN CỨU</span></div><div class="settings-card compatibility"><div class="setting-row"><div><h3>Ubuntu 24.04 · GNOME</h3><p>Mục tiêu hỗ trợ X11 và Wayland.</p></div><span class="subtle-pill">Chưa thử trên máy thật</span></div><div class="setting-row"><div><h3>Ubuntu 26.04 · GNOME</h3><p>GNOME chỉ còn Wayland; app X11 chạy qua XWayland.</p></div><span class="subtle-pill">Chưa thử trên máy thật</span></div></div>
+        <div class="quiet-note"><span>ⓘ</span><p>Các nút trong demo chỉ lưu lựa chọn trong trình duyệt. Chưa thay đổi phím tắt, autostart hay cài đặt Ubuntu.</p></div>
+      </section>
+      <footer><span>Q Translate <span class="footer-dot">·</span> Bản thử để review giao diện</span><span>English <span class="footer-dot">↔</span> Tiếng Việt</span></footer>
+    </div>
+  </main>
+</div>
+<dialog id="translation-dialog" class="translation-dialog" aria-label="Kết quả dịch"><div class="popup-tools"><span id="popup-lang" class="sr-only">TIẾNG VIỆT</span><div><button class="icon-button" id="copy-result" title="Sao chép" aria-label="Sao chép kết quả">⧉</button><button class="icon-button" id="close-popup" title="Đóng" aria-label="Đóng ô dịch">×</button></div></div><p id="result" aria-live="polite"></p></dialog>
+<dialog id="capture-dialog" class="capture-dialog" aria-labelledby="capture-title"><div class="capture-header"><h2 id="capture-title">Khoanh vùng mẫu</h2><button class="icon-button" id="close-capture" aria-label="Đóng OCR">×</button></div><p class="muted">Bấm vào vùng chữ bên dưới để mô phỏng nhận diện & dịch.</p><button class="sample-image" id="scan-region"><span class="sample-image-title">A SMALL REMINDER</span><strong>You don't have to be perfect.<br>Just take one small step<br>every day.</strong><span class="selection-corner tl"></span><span class="selection-corner tr"></span><span class="selection-corner bl"></span><span class="selection-corner br"></span></button><p class="field-note">Ảnh mẫu dựng trong demo · chưa chạy OCR thật</p></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
