@@ -3,6 +3,7 @@ Generated with the built-in image_gen tool.
 Final generation prompt:
 Use case: logo-brand. Create a finished minimalist application icon for Q-translate, an English/Vietnamese translator for Ubuntu. Flat pixel-clean vector aesthetic rendered as a square PNG. Background is a perfectly SOLID opaque near-black #111111 covering the ENTIRE square canvas. Foreground: one bold geometric turquoise #39C9F0 capital Q, whose circular bowl contains two short opposing horizontal translation arrows, all the same turquoise. The black background is visible in all negative spaces. Center the single Q mark, large and optically balanced, with 7% margins. Very simple chunky shapes for excellent readability at 16x16 pixels. Precisely smooth edges, solid untextured fills. Absolutely NO transparency, no alpha cutout, no distressed effects, no noise, no speckles, no texture, no gradients, no shadow, no 3D, no mockup, no explanatory text, no watermark, no additional letters. This is the actual icon asset, not a presentation.
 
-q-translate-source.png: original generated PNG with opaque dark background.
-q-translate.png: 256 px runtime copy, displayed at 16 logical pixels by St.Icon.
-Transparent variants were discarded because their alpha masks contained noise.
+docs/design/q-translate-generated.png: original imagegen PNG with dark background.
+q-translate.svg: vector paths traced from the generated mark with VTracer;
+solid cyan fill, transparent background, displayed at 16 logical pixels by St.Icon.
+The runtime SVG contains three paths and no embedded raster image.

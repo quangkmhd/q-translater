@@ -26,7 +26,7 @@ def package_files(root):
         p
         for p in (root / "extension/qtranslate@local").rglob("*")
         if p.is_file()
-        and p.suffix in (".js", ".css", ".json", ".xml", ".png")
+        and p.suffix in (".js", ".css", ".json", ".xml", ".svg")
         and "tests" not in p.parts
         and p.name != "package.json"
     ]
