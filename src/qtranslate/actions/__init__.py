@@ -213,7 +213,11 @@ class Engine:
             partial = []
             first = None
             output_chars = 0
-            attempt_deadline = min(now + 5, deadline)
+            # A chat reply is one continuous answer and can take longer than a
+            # short translation. Let it use the remaining task budget.
+            attempt_deadline = (
+                deadline if request.action == "chat" else min(now + 5, deadline)
+            )
 
             def delta(chunk):
                 nonlocal first, output_chars
@@ -288,6 +292,11 @@ class Engine:
                 return response.text + (separator[0] if separator else ""), entry, None
             if response and response.status in (429, 402):
                 self.cooldown[scope] = self.clock.monotonic() + response.retry_after
+            # Once chat text is visible, another attempt would erase it and
+            # generate a different answer. Keep the partial reply on failure;
+            # the session excludes failed turns from subsequent model context.
+            if request.action == "chat" and output_chars:
+                return "", None, last_error
         return (
             "",
             None,

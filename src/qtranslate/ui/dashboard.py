@@ -149,7 +149,7 @@ class Dashboard(Gtk.Application):
         info.append(label("Fallback: key trước → provider sau"))
         info.append(
             label(
-                "5 giây/key để trả xong · tổng tác vụ 30 giây · thinking tắt", "muted"
+                "Alt+V/X: 5 giây/lần · chat: tối đa 30 giây · thinking tắt", "muted"
             )
         )
 
@@ -511,7 +511,7 @@ class Dashboard(Gtk.Application):
         p.append(line)
         for text in [
             "Streaming: hiện chữ dần, chỉ copy khi hoàn tất",
-            "Timeout mỗi key AI: 5 giây · cả tác vụ: 30 giây",
+            "Alt+V/X: 5 giây/lần gọi AI · chat và cả tác vụ: tối đa 30 giây",
             "Khung Alt+V: tự nới, cuộn, copy lại; tự ẩn sau 30 giây",
             "Bấm ngoài đóng Alt+C/ảnh; Alt+V vẫn giữ",
             "Thinking: tắt · Không đặt giới hạn ký tự",

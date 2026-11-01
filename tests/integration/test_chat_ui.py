@@ -5,6 +5,53 @@ import unittest
 
 
 class NativeChatTests(unittest.TestCase):
+    def test_failed_stream_keeps_visible_text_in_real_widgets(self):
+        code = """
+import threading
+from qtranslate.actions import Engine
+from qtranslate.ui.chat import ChatApp, GLib
+from qtranslate.providers.base import ProviderChunk, ProviderResponse
+from tests.fixtures.clock import FakeClock
+from tests.unit.test_import_merge import bundle
+release=threading.Event();attempts=[];clock=FakeClock()
+class Adapter:
+ def run(self,p,c,deadline,cancel,on_delta):
+  attempts.append(c)
+  on_delta(ProviderChunk('Keep this visible answer'))
+  assert release.wait(3),'UI never displayed the partial reply'
+  return ProviderResponse(error_code='NETWORK_ERROR')
+app=ChatApp(runner=lambda *args:engine(*args))
+app.store.merge(bundle())
+engine=Engine(app.store,app.state_dir/'routing.json',Adapter(),clock=clock)
+app.controller.clock=clock
+app.register(None);app.activate()
+def spin_until(check):
+ loop=GLib.MainLoop()
+ def poll():
+  if check():loop.quit();return False
+  return True
+ poll_id=GLib.timeout_add(10,poll)
+ timeout=GLib.timeout_add(4000,lambda:(loop.quit(),False)[1])
+ loop.run()
+ if check():GLib.source_remove(timeout)
+ else:GLib.source_remove(poll_id)
+ assert check(),'Timed out waiting for chat state'
+app.input.get_buffer().set_text('Question');app.send()
+id=app.session.active_id;row=app.rows[id]
+spin_until(lambda:row['answer'].get_text()=='Keep this visible answer')
+release.set()
+spin_until(lambda:app.session.active_id is None)
+assert len(attempts)==1,'Chat retried after already showing text'
+assert row['answer'].get_text()=='Keep this visible answer'
+assert row['error'].get_visible() and row['error'].get_text()
+assert not row['copy'].get_sensitive()
+assert app.session.history==[]
+assert not app.stop_button.get_visible() and app.send_button.get_visible()
+engine.close();app.close_chat()
+print('CHAT_PARTIAL_PRESERVED_PASS')
+"""
+        self.run_script(code, "CHAT_PARTIAL_PRESERVED_PASS")
+
     def test_hidpi_window_stays_on_screen_after_growing_for_long_reply(self):
         code = """
 import subprocess,re
